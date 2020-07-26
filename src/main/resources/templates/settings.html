@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:insert="header :: head('Settings')">
+						
+	</head>
+	<body >
+		<script> AOS.init(); </script>
+		<br/>
+		<div class="container" th:insert="header :: copy" style="z-index:10 !important">
+		
+		</div>
+		<div class="row col-lg-12">						
+			<div class="row col-lg-4 col-md-12" style="margin: 30px">
+				<div style="color:#000; margin:35px 0px; padding: 20px; text-align: left;">
+					<p data-aos="fade-up" data-aos-easing="linear" data-aos-duration="300"> Automatically assigns exam dates to registered students.<p>
+					<p data-aos="fade-up" data-aos-easing="linear" data-aos-duration="400"><b style="color: red;">*</b>Ensure all required variables are provided before assignment.<p>
+					<p data-aos="fade-up" data-aos-easing="linear" data-aos-duration="500"><b style="color: red;">*</b>Ensure students' registration is completed before assignment.<p>
+				</div>
+				<input type= "button"  style="margin-left: 20px;" class="btn btn-success btnAssign"
+				 th:attr= "value='Assign Exam Dates to Students'" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="600">
+			</div>
+			<div class="row  col-lg-7 col-md-11 col-sm-10 col-xm-8" style="padding: 50px 0px; padding-left: 50px; background: #f8f8f8; z-index:-1;">
+				<form autocomplete="off" role="form"  id="settings_form" >
+					<div class="col-lg-12 row" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="700">
+						<div class="form-group col-lg-6">
+							<label>Total number of computers available <b style="color: red;">*</b></label>
+							<input type="number" class="form-control validateForm" id="nComputers"/>
+						</div>
+						<div class="form-group col-lg-6">
+							<label>Total number of students</label>
+							<input type="number" readonly class="form-control validateForm" id="nStudents"/>
+						</div>
+					</div>
+					<div class="col-lg-12 row" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="800">
+						<div class="form-group col-lg-6">
+							<label>Exam Start Date <b style="color: red;">*</b></label>
+							<input type="date" class="form-control validateForm" id="examStartDate"/>
+						</div>
+						<div class="form-group col-lg-6">
+							<label>Exam end date </label>
+							<input type="date" readonly class="form-control validateForm" id="examEndDate"/>
+						</div>
+					</div>
+					<div class="col-lg-12 row" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="900">
+						<div class="form-group col-lg-6">
+							<label>Exam starts (7:00 AM - 17:00 PM)<b style="color: red;">*</b></label>
+							<input type="time" class="form-control validateForm" min="05:00" max="17:00" id="examStartTime" required/>
+						</div>
+						
+						<div class="form-group col-lg-6">
+							<label>Surplus time (minutes)</label>
+							<input type="number" readonly class="form-control validateForm" id="surplusTime"/>
+						</div>
+					</div>
+					<div class="col-lg-12 row" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="1000">
+						<div class="form-group col-lg-6">
+							<label>Exam end time per day <b style="color: red;">*</b></label>
+							<input type="time" class="form-control validateForm" min="07:00" max="18:00" id="examEndTime" required/>
+						</div>
+						<div class="form-group col-lg-6">
+							<label>Number of batches/sessions per day</label>
+							<input type="number" readonly class="form-control validateForm" id="nSessions"/>
+						</div>
+					</div>
+					<div class="col-lg-12 row" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="1100">
+						<div class="form-group col-lg-6">
+							<label>Exam time per session (minutes) <b style="color: red;">*</b></label>
+							<input type="number" class="form-control validateForm" id="sessionTime"/>
+						</div>
+						<div class="form-group col-lg-6">
+							<label>Number of testable students per day</label>
+							<input type="number" readonly class="form-control validateForm" id="testableStudents"/>
+						</div>
+					</div>
+					<div class="col-lg-12 row">
+						<div class="form-group col-lg-6 col-md-12 mp0" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="1200">
+							<div class="col-lg-8 col-md-4">
+								<label>Activate student registration</label>
+							</div>
+							<div class="col-lg-4 col-md-2" align=right>
+								<label class="switch">
+									<input type="checkbox" class="form-control toggleSettings" id="enableStudentReg"/>
+									<span class="slider round"></span>
+								</label>
+							</div>
+						</div>							
+						<div class="form-group col-lg-6 col-md-12 mp0" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="1300">
+							<div class="col-lg-8 col-md-4">
+								<label>Activate Employee registration</label>
+							</div>
+							<div class="col-lg-4 col-md-2" align=right>
+								<label class="switch">
+									<input type="checkbox" class="form-control toggleSettings" id="enableEmployeeReg"/>
+									<span class="slider round"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-12 row ">
+						<div class="form-group col-lg-6 col-md-12 mp0" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="1400">
+							<div class="col-lg-8 col-md-4">
+								<label>Activate Role registration</label>
+							</div>
+							<div class="col-lg-4 col-md-2" align=right>
+								<label class="switch">
+									<input type="checkbox" class="form-control toggleSettings" id="enableRoleReg"/>
+									<span class="slider round"></span>
+								</label>
+							</div>
+						</div>
+						<div class="form-group col-lg-6 col-md-12 mp0" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="1500">
+							<div class="col-lg-8 col-md-4">
+								<label>Activate Online Examination</label>
+							</div>
+							<div class="col-lg-4 col-md-2" align=right>
+								<label class="switch">
+									<input type="checkbox" class="form-control toggleSettings" id="enableOnlineExam"/>
+									<span class="slider round"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-12 row ">
+						<div class="form-group col-lg-6 col-md-12 mp0" >
+							<div class="col-lg-8 col-md-4">
+								<label>Activate Course registration</label>
+							</div>
+							<div class="col-lg-4 col-md-2" align=right>
+								<label class="switch">
+									<input type="checkbox" class="form-control toggleSettings" id="enableCourseReg"/>
+									<span class="slider round"></span>
+								</label>
+							</div>
+						</div>
+						<div class="form-group col-lg-6 col-md-12 mp0">
+							<div class="col-lg-8 col-md-4">
+								<label>Activate Subject registration</label>
+							</div>
+							<div class="col-lg-4 col-md-2" align=right>
+								<label class="switch">
+									<input type="checkbox" class="form-control toggleSettings" id="enableSubjectReg"/>
+									<span class="slider round"></span>
+								</label>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" id="settingsId">
+				</form>
+			</div>
+		</div>
+	</body>
+	
+	<script>
+	
+		$( document ).ready(function() {
+			
+			var token = $("meta[name='_csrf']").attr("content");
+		  	var header = $("meta[name='_csrf_header']").attr("content");
+		  	
+			/**
+			* Returns the total number of students registered for the exam in the most recent year
+			*/
+			$.ajax({
+				url:"/nRegisteredStudents",
+            	"beforeSend": function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+				success:function(response){
+					$('#nStudents').val(response);
+				}
+			});
+
+			/**
+			* Saves form data unto the database each time a button is pressed 
+			*/
+			$(document).on('click','.validateForm', function(){
+				//alert();
+				if($('#settingsId').val() != "" && $('#examEndTime').val() != "" && $('#sessionTime').val() != "" 
+						&& $('#nComputers').val() != "" && $('#examStartDate').val() != "" 
+						&& $('#examStartTime').val() != "") {
+					$.ajax({
+						url:"/settings",
+						method: "POST",
+		            	"beforeSend": function(xhr) {
+		                    xhr.setRequestHeader(header, token);
+		                },
+						data: {
+							settingsId:$('#settingsId').val(),
+							nComputers:$('#nComputers').val(),
+							examStartDate: moment($('#examStartDate').val()).add(1,'days').format("MM/DD/YYYY"),
+							examStartTime:$('#examStartTime').val(),
+							examEndTime:$('#examEndTime').val(),
+							sessionTime: $('#sessionTime').val()
+						}
+					});
+				}
+			});
+				
+			/**
+			*Handles all updates made by toggle buttons
+			*A post request is made each time a button is toggled
+			*/
+			$(document).on('click','.toggleSettings', function(){
+				$.ajax({
+					url:"/togglesettings",
+					method: "POST",
+	            	"beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                },
+					data: {
+						settingsId: $('#settingsId').val(),
+						toggleId: $(this).attr("id")
+					}
+				});
+			});
+			
+			var fivePercentTestable = 0;
+			var fiftyPercentSessionTime = 0;
+			var sTime;
+			var eTime;
+			var sTime1;
+			var eTime1;
+			var timeDiff;
+			var nTestableStudents = 0;
+			var nStudents = 0;
+			var remainingStudents = 0;
+			var examStartDate;
+			var nExamDays = 0;
+			var assignExamDates = false;
+			
+			calbk();
+			
+			$(document).on('click','.btnAssign', function(){			
+				assignExamDates = true;
+				calbk();
+			});
+			
+			function calbk(){
+				
+				$.ajax({
+					url:"/settingsapi",
+					dataType:"json",
+	            	"beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                },
+					success:function(settings)
+					{
+						$('#settingsId').val(settings.settingsId);
+						$('#nComputers').val(settings.nComputers);
+						$('#examStartDate').val(moment(settings.examStartDate).format("YYYY-MM-DD"));
+						$('#examStartTime').val(settings.examStartTime);
+						$('#examEndTime').val(settings.examEndTime);
+						$('#sessionTime').val(settings.sessionTime);
+											
+						if(settings.enableStudentReg == 1){						
+							$("#enableStudentReg").attr("checked", "checked");
+						}
+						
+						if(settings.enableEmployeeReg == 1){
+							$("#enableEmployeeReg").attr("checked", "checked");
+						}
+						
+						if(settings.enableRoleReg == 1){
+							$("#enableRoleReg").attr("checked", "checked");
+						}
+						
+						if(settings.enableExam == 1){
+							$("#enableOnlineExam").attr("checked", "checked");
+						}
+						
+						if(settings.enableCourseReg == 1){
+							$("#enableCourseReg").attr("checked", "checked");
+						}
+						
+						if(settings.enableSubjectReg == 1){
+							$("#enableSubjectReg").attr("checked", "checked");
+						}
+						
+						/*
+						* Calculates the difference between the exam start time and end time------------------------------------------
+						* Provides a fair idea about the average time available for conducting exam in a day--------------------------
+						* Calculates how many exam sessions can be held in a day
+						* Calculates the suplus or excess time left
+						* Fiunally, calulates the total number of testable students per day
+						*/
+						sTime = settings.examStartTime;
+						eTime = settings.examEndTime;
+						sTime1 = sTime.split(':');
+						eTime1 = eTime.split(':');
+						timeDiff = parseInt(eTime1[0],10)*60 + parseInt(eTime1[1],10) - parseInt(sTime1[0],10)*60 - parseInt(sTime1[1],10);
+						
+						// Assigns possible n Sessions
+						$('#nSessions').val(Math.floor((timeDiff / settings.sessionTime),0));
+						
+						// Assigns possible n Surplus time 
+						$('#surplusTime').val(timeDiff % settings.sessionTime);
+						
+						// Assigns possible n testable student s perday
+						$('#testableStudents').val( parseInt($('#nSessions').val()) * settings.nComputers);
+	
+						//-----------------------------------------------------------------------------------------------------------
+						
+						nTestableStudents = parseInt($('#testableStudents').val()); // Total n students that can be tested in a day
+						nStudents = parseInt($('#nStudents').val()); // Total n students registered for the test
+						remainingStudents = 0;
+						examStartDate = moment($('#examStartDate').val()).add(1,'days').format("MM/DD/YYYY");
+						nExamDays = 1;
+						/**
+						*First checks to see if all registered students can be tested in one day. if not, performs the else 
+						*/
+
+						if(nStudents <= nTestableStudents){//-------------------------------------
+							//If condition is true, exam will be performed in one day
+							nTestableStudents = nStudents;
+							$('#examEndDate').val(moment(settings.examStartDate).format("YYYY-MM-DD"));
+						}else{
+
+							/**Checks to see if the number of remaining students are <= 5% of testable students per day
+							*and the amount of surplus time is greater than 50% of total time per session
+							*If this is true, it adds the remaining students to the number of testable students per day
+							*/
+							//alert();
+							remainingStudents = nStudents % nTestableStudents;
+							nExamDays = Math.floor(nStudents / nTestableStudents);
+							fivePercentTestable = 0.05 * nTestableStudents;
+							fiftyPercentSessionTime = 0.5 * settings.sessionTime;
+							//alert(nTestableStudents);
+							if(nExamDays == 1) {//---------------------------------------
+								if(remainingStudents <= fivePercentTestable && $('#surplusTime').val() >= fiftyPercentSessionTime){
+								
+								//Because the number of registered students are less than 5%, they will all write the same day
+									$('#testableStudents').val(nStudents);
+									nTestableStudents = nStudents
+									remainingStudents = 0;
+									//exam will be performed in one day
+									$('#examEndDate').val(moment(settings.examStartDate).format("YYYY-MM-DD"));
+								}
+								else if(remainingStudents > fivePercentTestable) {
+									
+									$('#examEndDate').val(moment(settings.examStartDate).add(2,'days').format("YYYY-MM-DD"));
+								}
+							}
+							else if(nExamDays > 1) {
+								
+								if(remainingStudents == 0) {
+									
+									$('#examEndDate').val(moment(settings.examStartDate).add(nExamDays + 1,'days').format("YYYY-MM-DD"));
+								}else if(remainingStudents <= fivePercentTestable){
+									
+									//remaining students will have their exams scheduled on the last day
+									$('#examEndDate').val(moment(settings.examStartDate).add(nExamDays + 1,'days').format("YYYY-MM-DD"));
+								}else if(remainingStudents > fivePercentTestable){
+									
+									//When assigning exam dates to reqistered students,
+									//the remaining students' exams will be scheduled on the last day.
+									$('#examEndDate').val(moment(settings.examStartDate).add((nExamDays + 2),'days').format("YYYY-MM-DD"));
+								}
+							}
+						}
+						if(assignExamDates){
+
+							$.ajax({
+								url:"/assignexamdate",
+								method: "POST",
+				            	"beforeSend": function(xhr) {
+				                    xhr.setRequestHeader(header, token);
+				                },
+								data: {
+									examStartDate: moment($('#examStartDate').val()).add(1,'days').format("MM/DD/YYYY"),
+									examEndDate: moment($('#examEndDate').val()).add(1,'days').format("MM/DD/YYYY"),
+									fivePercentTestable: fivePercentTestable,
+									nTestableStudents: nTestableStudents,
+									nRemainingStudents: remainingStudents,
+									nExamDays: nExamDays
+								},
+								success: function(){
+									assignExamDates = false;
+								}
+							});
+						}
+					}
+				});
+			}
+		});
+	</script>
+</html>

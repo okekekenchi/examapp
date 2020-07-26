@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:insert="header :: head('Computer Based Test')">
+	
+	</head>
+	<body >
+		<script> AOS.init(); </script>
+		
+	<body style="background: url('/images/adminbackgroundimg.jpg')">
+		<div class="container-fluid" style="background: rgb(0,0,0,0.8); background-size: cover; height: 100%">
+			<div class="row" style="background: #f8f8f8; padding:10px 0px;">
+				<div class="col-lg-6 col-md-6 question-timer" id="timer" align="left" th:utext="${Timer}">
+					
+				</div>
+				<div class="col-lg-6 col-md-6 question-header" align="right" th:utext="${profileImage}">
+				
+				</div>
+			</div>
+			
+			<div class= "row">
+				<div class='navigate-body' th:each="subject:${subjectList}" th:utext="${subject}">
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="row question-body">
+					<form>
+						<div class='col-lg-12'>
+							<span id="questionNumber" th:text="${examQuestion.questionNumber}"></span>
+							<span>. </span>
+							<span th:utext="${examQuestion.questionName}"></span>
+						</div>
+						<div class='col-lg-12 question-options radio' id = "optionA">
+							<label><input type="radio"  th:name="${subjectId}" class = "option" id = "optionA" th:utext="' ' + ${examQuestion.optionA}"></label>
+						</div>
+						<div class='col-lg-12 question-options radio' id = "optionB">
+							<label><input type="radio" th:name="${subjectId}" class = "option" id = "optionB" th:utext="' ' + ${examQuestion.optionB}"/></label>
+						</div>
+						<div class='col-lg-12 question-options radio' id = "optionC">
+							<label><input type="radio" th:name="${subjectId}" class = "option" id = "optionC" th:utext="' ' + ${examQuestion.optionC}"/></label>
+						</div>
+						<div class='col-lg-12 question-options radio' id = "optionD">
+							<label><input type="radio" th:name="${subjectId}" class = "option" id = "optionD" th:utext="' ' + ${examQuestion.optionD}"/></label>
+						</div>	
+						
+						<input type="hidden"  id = "optionSelected" th:value="${optionSelected}"/>
+						<input type="hidden" th:name="${subjectId}" id = "maxQuestion" th:value="${maxQuestion}"/>
+					</form>
+				</div>
+				<div class='col-lg-12 mp0' style="background: #f8f8f8;">
+					<input type="image" src="/images/previous.png" class = "btn" id = "btnPrev" th:name="${subjectId}" alt="<< Prev" />
+					<input type="image" src="/images/next.png" class = "btn" id = "btnNext" th:name="${subjectId}" alt="Next >>"/>
+				</div>	
+			</div>
+			
+			<div class="footer">
+				<div class='navigate-body' th:each="nav:${buttonNavigationList}" th:utext="${nav}">
+				
+				</div>
+			</div>
+		</div>
+	</body>
+	
+	<script>
+		$( document ).ready(function() {
+			
+			var token = $("meta[name='_csrf']").attr("content");
+		  	var header = $("meta[name='_csrf_header']").attr("content");
+		  	
+			var timer = setInterval(function(){
+				$.ajax({
+					url:"/getExamTime",
+					dataType:"text",
+					"beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                },
+					success:function(data)
+					{
+						$('#timer').html("<h1>"+data+"</h1>");
+						if(data == "00:00:00"){
+							clearInterval(timer);
+							window.location.replace("/endExam");
+						}
+					}
+				});
+			}, 1000);
+			
+			$(document).on('click','#submit', function(){
+				clearInterval(timer);
+			});
+			
+			$(document).on('click','#btnPrev', function(){
+				
+				var questionNumber = parseInt($('#questionNumber').html()) - 1;
+				var subjectId = $(this).attr("name");
+				
+				if(questionNumber > 0){
+					questionNumber -= 1;
+					window.location.replace("/examquestion/"+subjectId+"/"+questionNumber);
+				}
+			});
+		
+			$(document).on('click','#btnNext', function(){
+
+				var questionNumber = parseInt($('#questionNumber').html()) - 1;
+				var subjectId = $(this).attr("name");
+
+				if(questionNumber < (parseInt($('#maxQuestion').val()) - 1)){
+					questionNumber += 1;
+					window.location.replace("/examquestion/"+subjectId+"/"+questionNumber);
+				}
+			});
+
+			$(document).on('click','.option', function(){
+				var option = $(this).attr("id");
+				var questionNumber = parseInt($('#questionNumber').html()) - 1;
+				var subjectId = $(this).attr("name");
+				var url = "/examoption/"+subjectId+"/"+questionNumber+"/"+option;
+					
+				$.ajax({
+					url:url,
+					"beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                }
+				});
+			});
+						
+			switch($('#optionSelected').val()){
+				case "A":
+					$("#optionA :radio").attr("checked", "checked");
+					break;
+				case "B":
+					$("#optionB :radio").attr("checked", "checked");
+					break;
+				case "C":
+					$("#optionC :radio").attr("checked", "checked");
+					break;
+				case "D":
+					$("#optionD :radio").attr("checked", "checked");
+					break;
+			}
+		});
+	</script>
+	
+</html>

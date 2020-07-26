@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:insert="header :: head('Role')">
+	
+	</head>
+	<body>
+		<script> AOS.init(); </script>
+			<br/>
+		<div class="container" th:insert="header :: copy"></div>
+		
+		<div th:utext="${Message}" class="alert alert-info"></div>
+		<div class="row">
+			<div class="col-lg-12" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="500">				
+				<div class="panel panel-default">
+	                <div class="panel-heading">
+	                	<div class="row">
+	                    	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-6" data-aos="fade-left" data-aos-easing="linear" data-aos-duration="800">
+	                            <h3 class="panel-title">Role List</h3>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="panel-body">
+	                	<table id="paginatedTable" class="table table-bordered table-striped">
+	                		<thead>
+								<tr>
+									<th>ID</th>
+									<th>RoleName</th>
+									<th>Update</th>
+									<th>Delete</th>	
+								</tr>
+							</thead>
+	                	</table>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    
+	    <!-- 
+	    ------------- FORM MODAL FOR ADDING ROLE UNTO THE DATABASE -----------------------------------------------
+	     -->
+						
+	    <div id="roleModal" class="modal fade">
+			<div class="modal-dialog">	    	
+    			<form autocomplete="off" action="#" th:action="@{/role}" 
+					th:object="${roleModel}" method="post" class="form-horizontal"id="role_form" role="form">
+					<div class="modal-content">
+						<div class="modal-header col-sm-9">
+		   					<button style=color:white type="button" class="close" data-dismiss="modal" >&times;</button>
+							<h4  style=color:white class="modal-title"><i class="fa fa-plus"></i>Role Form</h4>
+		   				</div>
+		   				<div class="modal-body col-sm-9">
+							<div class="form-group">
+								<label th:if="${#fields.hasErrors('roleName')}" th:errors="*{roleName}"
+										class="validation-message"  id="roleName"></label>
+										
+								<input type="text"  th:field="*{roleName}" placeholder="Role" class="form-control" /> 
+							</div>
+						</div>
+						<div class="modal-footer col-sm-9">
+							<div class="form-group">
+								<input type="hidden" id="roleId" th:field="*{roleId}"/>
+								<input type="hidden" id="btn_action" />
+								<button style=background:#724A91 type="submit" id="action" class="btn btn-primary btn-block"></button>
+							</div>
+						</div>
+					</div>
+				</form>
+	    	</div>
+	    </div>
+    </body>
+
+	<script>
+	
+		$( document ).ready(function() {
+			var token = $("meta[name='_csrf']").attr("content");
+		  	var header = $("meta[name='_csrf_header']").attr("content");
+		  	
+			var roleDataTable = $('#paginatedTable').DataTable( {
+		        "processing": true,
+		        "serverSide": true,
+		        "pageLength": 10,
+		        "ajax": {
+		            "url": "/role/paginated/",
+	            	/* "beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                } */
+	            },
+		        "columns": [
+	                    { "data": "roleId", "name" : "roleId", "title" : "Id"  },
+	                    { "data": "roleName", "name" : "roleName" , "title" : "Name"},
+	                    { "data": "update", "name" : "update" , "title" : "Update"},
+	                    { "data": "delete", "name" : "delete" , "title" : "Delete"}
+	                ],
+                "columnDefs":[
+        			{
+        				"targets":[2,3],
+        				"orderable":false,
+        			}
+       			]
+			});
+			
+			$(document).on('click','.delete', function(){
+				var roleId = $(this).attr("id");
+				if(confirm("Are you sure you want to delete role?"))
+				{
+					$.ajax({
+						url:"/role",
+						method:"DELETE",
+						data:{roleId:roleId},
+		            	"beforeSend": function(xhr) {
+		                    xhr.setRequestHeader(header, token);
+		                },
+						success:function(data)
+						{
+							//$('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');
+							roleDataTable.ajax.reload();
+						}
+					})
+				}
+				else
+				{
+					return false;
+				}
+			});
+			
+			$(document).on('click', '.update', function(){
+				var roleId = $(this).attr("id");
+				$.ajax({
+					url:"/role/fetch",
+					method:"POST",
+					data:{roleId:roleId},
+					dataType:"json",
+	            	"beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                },
+					success:function(data)
+					{
+						$('#roleName').val(data.roleName);
+						$('.modal-title').html("<i class='fa fa-pencil-square-o'></i> Edit Role");
+						$('#roleId').val(data.roleId);
+						$('#action').html("Edit Role");
+						$('#roleModal').modal('show');
+					}
+				})
+			});
+		});
+	</script>
+</html>

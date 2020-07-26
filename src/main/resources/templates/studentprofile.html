@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:insert="header :: head('Profile')">
+	
+	</head>
+	<body>
+		<script> AOS.init(); </script>
+	      <div class="main-container" id="wrapper">
+	      	
+	      	<div class="page-content-wrapper">
+	      	<div>
+	      		<a href="#" class="btn btn-success" id="form-toggle" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="500">Edit Form</a>
+	      		<a href="#" class="btn btn-success" id="form-toggle" data-aos="fade-left" data-aos-easing="linear" data-aos-duration="500">Change Password</a>
+	      	</div>
+	        	<div class="container-fluid">
+	           	 	<div class="row">
+		                <div class="col-lg-12 col-md-12 profile-image" align="center" th:utext="${student.profileImage}">
+		                	<!---- PROFILE IMAGE GOES HERE  -->
+		               	</div>
+		                <div class="col-md-12 profile-body">
+		                	<div class="row">								
+		                		<div class="col-md-4"> 
+				                	<span class="profile-label">First Name : <label th:utext="${student.firstName}"></label></span>
+			                	</div>
+			                	<div class="col-md-4">
+									<span class="profile-label">Last Name : <label th:utext="${student.lastName}"></label></span>
+			                	</div>
+			                	<div class="col-md-4">
+				                	<span class="profile-label"> Other Name : <label th:utext="${student.otherName}"></label></span>
+			                	</div>
+		                	</div>
+		                	<hr/>
+		                	<div class="row">
+			                	<div class="col-md-7">
+			                		<span class="profile-label"> Email : <label th:utext="${student.email}"></label></span>
+			                	</div>
+			                	<div class="col-md-3">
+			                		<span class="profile-label"> Phone Number : <label th:utext="${student.phone}"></label></span>
+			                	</div>
+			                	<div class="col-md-2">
+			                		<span class="profile-label"> Gender : <label th:utext="${student.gender}"></label></span>
+			                	</div>
+		                	</div>
+		                	<hr/><hr/>
+		                	<div class="row" >
+		                		<div class="col-md-12">
+			                		<span class="profile-label"> Address : <label th:utext="${student.address}"></label></span>
+			                	</div>
+		                	</div>
+		                	<hr><hr>
+		                	<div class="row">
+			                	<div class="col-md-12">
+			                		<span class="profile-label">Course : <label th:utext="${student.courseModel}"></label></span>
+			                	</div>
+		                	</div>
+		                	<div class="row subject">
+			                		<div class="col-md-12 label-pointer" id="SubjectLabel" > 
+		                				<span class="profile-label">Subjects <span class="caret"></span></span>
+			                		</div>
+			                		<div class="subject-body">
+				                			<p class="Subject" th:each="subject:${subjectList}" th:utext="${subject.subjectName}"></p>
+			                		</div>
+		                	</div>
+		                	<hr>
+			                <div class="row">
+			                	<div class="col-md-4">		                	
+				                	<span class="profile-label">Status : <label th:utext="${student.validStatus}"></label></span>
+			                	</div>
+			                	<div class="col-md-4">
+				                	<span class="profile-label">Online : <label th:utext="${student.online}"></label></span>
+			                	</div>
+			                	<div class="col-md-4">
+				                	<span class="profile-label">Registration Date : <label th:utext="${student.regdate}"></label></span>
+			                	</div>
+		                	</div>
+		               	</div>
+		            </div>
+				</div>
+			</div>
+			<div class="sidebar-wrapper">
+				<form autocomplete="off" action="#" th:action="@{/studentprofile}" method="POST" role="form"
+	    			 th:object="${studentModel}" enctype="multipart/form-data"  id="student_form" >
+								<div class="form-header"></div>
+								
+				   				<div >
+									<label th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
+											class="validation-message"></label>
+									<input type="text" th:field="*{firstName}" id="firstName" placeholder="First Name"
+											class="profile-input" pattern="^\s*([a-zA-Z]+)\s*$"/> 
+								</div>
+	
+								<div>
+									<label	th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+											class="validation-message"></label>
+									<input type="text" th:field="*{lastName}" id="lastName"
+											placeholder="Middle Name" class="profile-input" /> 
+								</div>
+								
+								<div>
+									<label	th:if="${#fields.hasErrors('otherName')}" th:errors="*{otherName}"
+											class="validation-message"></label>
+									<input type="text" th:field="*{otherName}" id="otherName"
+											placeholder="Surname" class="profile-input"/>
+								</div>
+								
+								<div>
+								 	<label th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"
+										class="validation-message"></label>
+									<input type="tel" th:field="*{phone}" id="phone"
+									 	placeholder="Phone" class="profile-input" />
+								</div>
+								
+								<div>
+									<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+										class="validation-message"></label>
+									<input type="text" th:field="*{email}" id="email"
+										placeholder="Okeke@gmail.com" class="profile-input"/>									 
+								</div>
+								
+								<div>
+									<label for="gender" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"
+										class="validation-message"></label>
+									<select th:field="*{gender}" id="gender" class="profile-input">
+										<option th:value="default" >Select Gender</option>
+										<option th:value="MALE" th:text="MALE" ></option>
+										<option th:value="FEMALE" th:text="FEMALE" ></option>
+									</select>	
+								</div>
+			
+								<div>
+								 	<label for="address" th:if="${#fields.hasErrors('address')}" 
+									 th:errors="*{address}"	class="validation-message"></label>
+									<input type="text" th:field="*{address}" id="address" placeholder="Address"
+										class="profile-input"/>
+								</div>
+								
+								<div>								
+								 	<label for="courseModel" th:if="${#fields.hasErrors('courseModel')}" th:errors="*{courseModel}"
+										class="validation-message"></label>
+									<select th:field="*{courseModel}"	class="profile-input">
+										<!-- <option th:value="default" >Select Course</option> -->
+										<option th:each="course:${courseList}"
+										th:value="${course.courseId}"
+										th:utext="${course.courseName}"/>
+									</select>
+								</div>
+							
+							<div class="footer col-sm-9">
+								<div>
+									<input type="hidden" id="studentId" th:field="*{userId}"/>
+									<button style=background:#724A91 type="submit" id="action" class="btn btn-primary btn-block" th:utext="EDIT"></button>
+								</div>		
+							</div>
+							
+							<div class="form-header"></div>
+					</form>
+			</div>
+		</div>
+	</body>
+	
+	<script>
+		$( document ).ready(function() {
+			
+			var token = $("meta[name='_csrf']").attr("content");
+		  	var header = $("meta[name='_csrf_header']").attr("content");
+		  	
+			$(document).on('click','#SubjectLabel', function(){
+				var elements = $(".subject-body");
+					if(elements.css("display") == "none"){
+						elements.css("display","flex");
+					}else{
+						elements.css("display","none");
+					}
+				});
+			
+			$(document).on('click','.form-header, .profile-image', function(e){
+				e.preventDefault();
+				$("#wrapper").toggleClass("menuDisplayed");
+			});
+			
+			$(document).on('click','#form-toggle', function(e){
+					e.preventDefault();
+					$("#wrapper").toggleClass("menuDisplayed");
+					
+					var studentId = $(".studentProfileImage").attr("id");
+					$.ajax({
+						url:"/studentprofile/fetch/"+studentId,
+						dataType:"json",
+						success:function(data)
+						{
+							$('#studentId').val(data.userId);
+							$('#firstName').val(data.firstName);
+							$('#lastName').val(data.lastName);
+							$('#otherName').val(data.otherName);
+							$('#email').val(data.email);
+							$('#phone').val(data.phone);
+							$('#address').val(data.address);
+							$('#gender').val(data.gender);
+							$('#courseModel').val(data.courseModel);
+						}
+					}); 
+				});
+		});
+	</script>
+</html>

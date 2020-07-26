@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:fragment="head(title)">
+		<title th:text="${title}"></title>
+		<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+		<meta charset="utf-8">
+	    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+		<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+		<script src="/js/jquery-3.4.1.min.js"></script>
+		<link rel="stylesheet" href="/css/bootstrap.min.css" />
+		<script src="/js/jquery.dataTables.min.js"></script>
+		<script src="/js/dataTables.bootstrap.min.js"></script>		
+		<link rel="stylesheet" href="/css/dataTables.bootstrap.min.css" />
+		<link rel="stylesheet" href="/css/examapp.css" />		
+		<link rel="stylesheet" href="/css/aos/styles.css" />
+    	<link rel="stylesheet" href="/css/aos/aos.css" />
+    	<script src="/js/aos.js"></script>
+		<link href="/images/logo.png" rel="icon"/>
+		<script src="/js/bootstrap.min.js"></script>
+		<script src="/js/moment.js"></script>
+	</head>
+  <body>  
+    <div th:fragment="copy" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="200" style="z-index:1 !important">
+   		<nav class="navbar navbar-inverse" style="z-index:1 !important">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a href="/" class="navbar-brand">Home</a>
+				</div>
+				<ul class="nav navbar-nav">
+					<li><a th:href="subject" th:text="Subject"></a></li>
+					<li><a th:href="course" th:text="Course"></a></li>
+					<li><a th:href="question" th:text="Question"></a></li>
+					<li><a th:href="role" th:text="Role"></a></li>							
+					<li><a th:href="student" th:text="Student"></a></li>					
+					<li><a th:href="employee" th:text="User"></a></li>
+					<li><a th:href="admissionlist">Admission List</a></li>
+					<li><a th:href="settings">Settings</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right" style="z-index: 2;">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="label label-pill label-danger count"></span> 
+						<img src="/images/profile.png" alt="icon"/>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="profile">Profile</a></li>
+							<li><a href="logout">Logout</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</nav>
+    </div>  
+  </body>  
+</html>
