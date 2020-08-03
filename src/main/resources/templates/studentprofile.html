@@ -1,78 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head th:insert="header :: head('Profile')">
+	<head th:insert="header :: head('Student Profile')">
 	
 	</head>
-	<body>
+	<body style="background: url('/images/adminbackgroundimg.jpg')">
 		<script> AOS.init(); </script>
-	      <div class="main-container" id="wrapper">
+		<div class="main-container" id="wrapper" style="background: rgb(0,0,0,0.8); background-size: cover; height: 100%">
 	      	
 	      	<div class="page-content-wrapper">
-	      	<div>
-	      		<a href="#" class="btn btn-success" id="form-toggle" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="500">Edit Form</a>
-	      		<a href="#" class="btn btn-success" id="form-toggle" data-aos="fade-left" data-aos-easing="linear" data-aos-duration="500">Change Password</a>
+	      	<div class="row col-lg-2 ">
+	      		<input type="image" src="/images/edit.png" class="" id="form-toggle" value= "Edit Form" style="margin: 0 0 0 20px; width: 50px; height: 50px; border-radius: 5px;">
 	      	</div>
 	        	<div class="container-fluid">
 	           	 	<div class="row">
 		                <div class="col-lg-12 col-md-12 profile-image" align="center" th:utext="${student.profileImage}">
 		                	<!---- PROFILE IMAGE GOES HERE  -->
 		               	</div>
-		                <div class="col-md-12 profile-body">
-		                	<div class="row">								
-		                		<div class="col-md-4"> 
-				                	<span class="profile-label">First Name : <label th:utext="${student.firstName}"></label></span>
-			                	</div>
-			                	<div class="col-md-4">
-									<span class="profile-label">Last Name : <label th:utext="${student.lastName}"></label></span>
-			                	</div>
-			                	<div class="col-md-4">
-				                	<span class="profile-label"> Other Name : <label th:utext="${student.otherName}"></label></span>
-			                	</div>
-		                	</div>
-		                	<hr/>
-		                	<div class="row">
-			                	<div class="col-md-7">
-			                		<span class="profile-label"> Email : <label th:utext="${student.email}"></label></span>
-			                	</div>
-			                	<div class="col-md-3">
-			                		<span class="profile-label"> Phone Number : <label th:utext="${student.phone}"></label></span>
-			                	</div>
-			                	<div class="col-md-2">
-			                		<span class="profile-label"> Gender : <label th:utext="${student.gender}"></label></span>
-			                	</div>
-		                	</div>
-		                	<hr/><hr/>
-		                	<div class="row" >
-		                		<div class="col-md-12">
-			                		<span class="profile-label"> Address : <label th:utext="${student.address}"></label></span>
-			                	</div>
-		                	</div>
-		                	<hr><hr>
-		                	<div class="row">
-			                	<div class="col-md-12">
-			                		<span class="profile-label">Course : <label th:utext="${student.courseModel}"></label></span>
-			                	</div>
-		                	</div>
-		                	<div class="row subject">
-			                		<div class="col-md-12 label-pointer" id="SubjectLabel" > 
-		                				<span class="profile-label">Subjects <span class="caret"></span></span>
-			                		</div>
-			                		<div class="subject-body">
-				                			<p class="Subject" th:each="subject:${subjectList}" th:utext="${subject.subjectName}"></p>
-			                		</div>
-		                	</div>
-		                	<hr>
-			                <div class="row">
-			                	<div class="col-md-4">		                	
-				                	<span class="profile-label">Status : <label th:utext="${student.validStatus}"></label></span>
-			                	</div>
-			                	<div class="col-md-4">
-				                	<span class="profile-label">Online : <label th:utext="${student.online}"></label></span>
-			                	</div>
-			                	<div class="col-md-4">
-				                	<span class="profile-label">Registration Date : <label th:utext="${student.regdate}"></label></span>
-			                	</div>
-		                	</div>
+		                <div class="col-md-12 profile-body" style="display: flex; flex-flow: column;">
+		                								
+			                	<span class="profile-label"> First Name : <label th:utext="${student.firstName}"></label></span>
+								<span class="profile-label"> Middle Name : <label th:utext="${student.lastName}"></label></span>
+			                	<span class="profile-label"> Surname : <label th:utext="${student.otherName}"></label></span>
+		                		<span class="profile-label"> Email : <label th:utext="${student.email}"></label></span>
+		                		<span class="profile-label"> Phone : <label th:utext="${student.phone}"></label></span>
+		                		<span class="profile-label"> Gender : <label th:utext="${student.gender}"></label></span>
+		                		<span class="profile-label"> Address : <label th:utext="${student.Address}"></label></span>
+		                   		<span class="profile-label"> Course : <label th:utext="${student.courseModel}"></label></span>
+			                	<span class="profile-label"> Status : <label th:utext="${student.validStatus}"></label></span>
+			                	<span class="profile-label label-pointer" id="SubjectLabel">Subjects <span class="caret"></span></span>
+		                		<div class="subject-body">
+			                			<p class="Subject" th:each="subject:${subjectList}" th:utext="${subject.subjectName}"></p>
+	                			</div>
+			                	<span class="profile-label"> Online : <label th:utext="${student.onlineStatus}"></label></span>
+			                	<span class="profile-label"> Registration Date : <label th:utext="${student.regdate}"></label></span>
+		                	
 		               	</div>
 		            </div>
 				</div>
@@ -104,18 +65,11 @@
 								</div>
 								
 								<div>
-								 	<label th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"
-										class="validation-message"></label>
-									<input type="tel" th:field="*{phone}" id="phone"
-									 	placeholder="Phone" class="profile-input" />
-								</div>
-								
-								<div>
 									<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
 										class="validation-message"></label>
 									<input type="text" th:field="*{email}" id="email"
 										placeholder="Okeke@gmail.com" class="profile-input"/>									 
-								</div>
+								</div>	
 								
 								<div>
 									<label for="gender" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"
@@ -132,8 +86,8 @@
 									 th:errors="*{address}"	class="validation-message"></label>
 									<input type="text" th:field="*{address}" id="address" placeholder="Address"
 										class="profile-input"/>
-								</div>
-								
+								</div>					
+							
 								<div>								
 								 	<label for="courseModel" th:if="${#fields.hasErrors('courseModel')}" th:errors="*{courseModel}"
 										class="validation-message"></label>
@@ -147,9 +101,13 @@
 							
 							<div class="footer col-sm-9">
 								<div>
-									<input type="hidden" id="studentId" th:field="*{userId}"/>
-									<button style=background:#724A91 type="submit" id="action" class="btn btn-primary btn-block" th:utext="EDIT"></button>
-								</div>		
+									<input type="hidden" id="employeeId" th:field="*{userId}"/>
+									<button type="submit" id="action" class="btn btn-primary btn-block btn_submit" th:utext="EDIT"></button>
+								</div>	
+							</div>
+							
+							<div class="footer col-sm-9">
+				      			<a href="/changepassword" style="text-decoration: none; color: yellow; font-size: 15px;">Change Password</a>
 							</div>
 							
 							<div class="form-header"></div>
@@ -174,32 +132,31 @@
 				});
 			
 			$(document).on('click','.form-header, .profile-image', function(e){
-				e.preventDefault();
-				$("#wrapper").toggleClass("menuDisplayed");
+				$("#form-toggle").trigger('click');
 			});
 			
 			$(document).on('click','#form-toggle', function(e){
-					e.preventDefault();
-					$("#wrapper").toggleClass("menuDisplayed");
-					
-					var studentId = $(".studentProfileImage").attr("id");
-					$.ajax({
-						url:"/studentprofile/fetch/"+studentId,
-						dataType:"json",
-						success:function(data)
-						{
-							$('#studentId').val(data.userId);
-							$('#firstName').val(data.firstName);
-							$('#lastName').val(data.lastName);
-							$('#otherName').val(data.otherName);
-							$('#email').val(data.email);
-							$('#phone').val(data.phone);
-							$('#address').val(data.address);
-							$('#gender').val(data.gender);
-							$('#courseModel').val(data.courseModel);
-						}
-					}); 
-				});
+				e.preventDefault();
+				$("#wrapper").toggleClass("menuDisplayed");
+				
+				var studentId = $(".studentProfileImage").attr("id");
+				$.ajax({
+					url:"/studentprofile/fetch/"+studentId,
+					dataType:"json",
+					success:function(data)
+					{
+						$('#studentId').val(data.userId);
+						$('#firstName').val(data.firstName);
+						$('#lastName').val(data.lastName);
+						$('#otherName').val(data.otherName);
+						$('#email').val(data.email);
+						$('#phone').val(data.phone);
+						$('#address').val(data.address);
+						$('#gender').val(data.gender);
+						$('#courseModel').val(data.courseModel);
+					}
+				}); 
+			});
 		});
 	</script>
 </html>

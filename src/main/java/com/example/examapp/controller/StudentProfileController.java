@@ -50,23 +50,30 @@ public class StudentProfileController {
 		studentModel = studentService.findById(id);
 		subjectModelList = new ArrayList<>();
 
+		System.out.println(studentModel.getPhone() + "  ----------  "+ studentModel.getGender());
 		student = new Student(id, studentModel.getFirstName(), studentModel.getLastName(), studentModel.getOtherName(),
 				studentModel.getEmail(), studentModel.getAddress(), studentModel.getPhone(), studentModel.getGender(),
 				studentModel.getStatus(), studentModel.getOnline(), studentModel.getRegdate(), "",
 				studentModel.getCourseModel().getCourseName().toString());
 
 		subjectModelList = subjectService.subjectRegistered(studentModel.getCourseModel().getCourseId());
-
+		
 		for (int i = 1; i < subjectModelList.size(); i++) {
 			subjectModelList.get(i).setSubjectId(i);
 		}
 
 		if (student.getStatus() == 1) {
-			student.setValidStatus("<span class='label label-success'>Active</span>");
+			student.setValidStatus("<img src='/images/active.png' alt='Active' style='width:30px; height:30px;' />");
 		} else {
-			student.setValidStatus("<span class='label label-danger'>Inactive</span>");
+			student.setValidStatus("<img src='/images/inactive.png' alt='Inactive' style='width:30px; height:30px;' />");
 		}
-
+		
+		if(student.getOnline() == 1) {
+			student.setOnlineStatus("<img src='/images/Online.png' alt='Active' style='width:30px; height:30px;'/>");
+		}else {
+			student.setOnlineStatus("<img src='/images/offline.png' alt='Inactive' style='width:30px; height:30px;' />");
+		}
+		
 		student.setAddress(studentModel.getAddress());
 		student.setProfileImage("<img src='/Image/" + id + "' name='image' id='" + id
 				+ "' alt='studentImage' class='img-rounded studentProfileImage'/>");

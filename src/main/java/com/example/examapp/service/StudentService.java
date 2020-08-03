@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,12 +105,37 @@ public class StudentService {
 	public StudentModel findById(int studentId) {
 		return studentRepo.findById(studentId);
 	}
+	
+	public String getCourseId(int studentId) {
+		String queryString = "SELECT courseId FROM StudentModel" + 
+							" WHERE studentId = " + studentId;
+
+		Query query = entityManager.createNativeQuery(queryString);
 		
+		return query.getResultList().get(0).toString();
+	}
+	
 	public List<StudentModel> getRegisteredStudents() {
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(new Date());
 		int year = calendar.get(Calendar.YEAR);
 		
 		return studentRepo.findRegisteredStudents(year);
+	}
+	
+	public int getActiveStudents() {
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(new Date());
+		int year = calendar.get(Calendar.YEAR);
+		
+		return studentRepo.nActiveStudents(year);
+	}
+	
+	public int getStudentsOnline() {
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(new Date());
+		int year = calendar.get(Calendar.YEAR);
+		
+		return studentRepo.nStudentsOnline(year);
 	}
 }

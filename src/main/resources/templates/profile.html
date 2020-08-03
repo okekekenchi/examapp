@@ -32,48 +32,48 @@
 				</div>
 			</div>
 			<div class="sidebar-wrapper">
-				<form autocomplete="off" action="#" th:action="@{/employeeprofile}" method="POST" role="form"
+				<form autocomplete="off" action="#" th:action="@{/admin/employeeprofile}" method="POST" role="form"
 	    			 th:object="${employeeModel}" enctype="multipart/form-data"  id="employee_form" >
-								<div class="form-header"></div>
-								
-				   				<div >
-									<label th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
-											class="validation-message"></label>
-									<input type="text" th:field="*{firstName}" id="firstName" placeholder="First Name"
-											class="profile-input" pattern="^\s*([a-zA-Z]+)\s*$"/> 
-								</div>
-	
-								<div>
-									<label	th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
-											class="validation-message"></label>
-									<input type="text" th:field="*{lastName}" id="lastName"
-											placeholder="Middle Name" class="profile-input" /> 
-								</div>
-								
-								<div>
-									<label	th:if="${#fields.hasErrors('otherName')}" th:errors="*{otherName}"
-											class="validation-message"></label>
-									<input type="text" th:field="*{otherName}" id="otherName"
-											placeholder="Surname" class="profile-input"/>
-								</div>
-								
-								<div>
-									<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-										class="validation-message"></label>
-									<input type="text" th:field="*{email}" id="email"
-										placeholder="Okeke@gmail.com" class="profile-input"/>									 
-								</div>						
-							
-							
-							<div class="footer col-sm-9">
-								<div>
-									<input type="hidden" id="employeeId" th:field="*{userId}"/>
-									<button type="submit" id="action" class="btn btn-primary btn-block btn_submit" th:utext="EDIT"></button>
-								</div>		
-							</div>
-							
-							<div class="form-header"></div>
-					</form>
+						<div class="form-header"></div>
+						
+		   				<div >
+							<label th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
+									class="validation-message"></label>
+							<input type="text" th:field="*{firstName}" id="firstName" placeholder="First Name"
+									class="profile-input" pattern="^\s*([a-zA-Z]+)\s*$"/> 
+						</div>
+
+						<div>
+							<label	th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+									class="validation-message"></label>
+							<input type="text" th:field="*{lastName}" id="lastName"
+									placeholder="Middle Name" class="profile-input" /> 
+						</div>
+						
+						<div>
+							<label	th:if="${#fields.hasErrors('otherName')}" th:errors="*{otherName}"
+									class="validation-message"></label>
+							<input type="text" th:field="*{otherName}" id="otherName"
+									placeholder="Surname" class="profile-input"/>
+						</div>
+						
+						<div>
+							<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+								class="validation-message"></label>
+							<input type="text" th:field="*{email}" id="email"
+								placeholder="Okeke@gmail.com" class="profile-input"/>									 
+						</div>						
+					
+					
+					<div class="footer col-sm-9">
+						<div>
+							<input type="hidden" id="employeeId" th:field="*{userId}"/>
+							<button type="submit" id="action" class="btn btn-primary btn-block btn_submit" th:utext="EDIT"></button>
+						</div>		
+					</div>
+					
+					<div class="form-header"></div>
+				</form>
 			</div>
 		</div>
 	</body>
@@ -98,30 +98,30 @@
 			});
 			
 			$(document).on('click','#form-toggle', function(e){
-					e.preventDefault();
-					$("#wrapper").toggleClass("menuDisplayed");
-					
-					var employeeId = $(".studentProfileImage").attr("id");
-					$.ajax({
-						url:"/employeeprofile/fetch/"+employeeId,
-						dataType:"json",
-		            	"beforeSend": function(xhr) {
-		                    xhr.setRequestHeader(header, token);
-		                },
-						success:function(data)
-						{
-							$('#employeeId').val(data.userId);
-							$('#firstName').val(data.firstName);
-							$('#lastName').val(data.lastName);
-							$('#otherName').val(data.otherName);
-							$('#email').val(data.email);
-							$('#phone').val(data.phone);
-							$('#address').val(data.address);
-							$('#gender').val(data.gender);
-							$('#courseModel').val(data.courseModel);
-						}
-					}); 
-				});
+				e.preventDefault();
+				$("#wrapper").toggleClass("menuDisplayed");
+				
+				var employeeId = $(".studentProfileImage").attr("id");
+				$.ajax({
+					url:"/admin/employeeprofile/fetch/"+employeeId,
+					dataType:"json",
+	            	"beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                },
+					success:function(data)
+					{
+						$('#employeeId').val(data.userId);
+						$('#firstName').val(data.firstName);
+						$('#lastName').val(data.lastName);
+						$('#otherName').val(data.otherName);
+						$('#email').val(data.email);
+						$('#phone').val(data.phone);
+						$('#address').val(data.address);
+						$('#gender').val(data.gender);
+						$('#courseModel').val(data.courseModel);
+					}
+				}); 
+			});
 		});
 	</script>
 </html>

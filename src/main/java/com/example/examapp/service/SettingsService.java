@@ -21,6 +21,10 @@ public class SettingsService {
 	public SettingsModel getSettings(int settingsId) {
 		return settingsModelRepo.findById(settingsId);
 	}
+	
+	public SettingsModel getSetting() {
+		return settingsModelRepo.findById(1);
+	}
 
 	public void Save(SettingsModel settingsModel) {
 		settingsModelRepo.save(settingsModel);		

@@ -20,6 +20,16 @@ body{
 	background-size: cover;
 	height: 100%;
 }
+.nav-tab{
+	min-width: 120px !important;
+	width: auto;
+	min-height: 70px !important;
+	height: 70px !important;
+	font-size: 18px;
+	text-align: center;
+	padding-top: 10px;
+}
+
 .sidebar-wrapper{
 	display: block;
 	padding: 0px;
@@ -92,7 +102,7 @@ hr{
 	height:4px;
 }
 .profile-image{
-	background-image: linear-gradient(transparent 65%, #f8f8f8 35%);
+	background-image: linear-gradient(transparent 65%, rgb(248,248,248,0.9) 35%);
 }
 
 .studentProfileImage:hover{

@@ -11,6 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AuthenticationResponse {
 
-	private Integer id;
-	private String message;
+	private Integer id = 0;
+	private String email = "";
+	private String firstName = "";
+	private String message = "";
+	private int examTime = 0;
 }

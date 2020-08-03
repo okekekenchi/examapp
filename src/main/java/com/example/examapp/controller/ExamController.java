@@ -3,6 +3,10 @@ package com.example.examapp.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,6 +26,7 @@ import com.example.examapp.model.StudentModel;
 import com.example.examapp.model.SubjectModel;
 import com.example.examapp.service.EmailService;
 import com.example.examapp.service.QuestionService;
+import com.example.examapp.service.SettingsService;
 import com.example.examapp.service.StudentService;
 import com.example.examapp.service.SubjectService;
 import com.google.gson.Gson;
@@ -35,6 +40,7 @@ public class ExamController {
 	@Autowired private StudentService studentService;
 	@Autowired private SubjectService subjectService;
 	@Autowired private EmailService emailService;
+	@Autowired private SettingsService settingsService;
 		
 	private List<String> subjectList;
 	private List<String> buttonNavigationList;
@@ -45,11 +51,13 @@ public class ExamController {
 	private ExamTimeFormat examTimeFormat;
 	
 	private String Username = null;	
-	private String profileImage = null;	
-	private static int numberOfQuestion = 10;
+	private String profileImage = null;
 	private String currentExamTime = "00:00:00";		
 	private boolean endExam = false;
 	private boolean startExam = false;
+	
+	@PersistenceContext
+	private EntityManager entityManager;
 	
 	@GetMapping("/examquestion/{subjectId}/{questionNumber}")
 	public ModelAndView getExamQuestions(ModelAndView mv, @PathVariable int subjectId, @PathVariable int questionNumber) {
@@ -89,14 +97,12 @@ public class ExamController {
 			SecurityContextHolder.getContext().setAuthentication(null);
 			mv.setViewName("/login");
 			return mv;
-		}
-	
+		}	
 	
 		/**
 		 * Sets the question number of a particular question
 		 * If the question number is 6565 it means the subject is being visited for the first time
-		 */
-				
+		 */				
 		try {
 			if(questionProperty!=null) {
 				for(QuestionProp qp : questionProperty)
@@ -157,7 +163,7 @@ public class ExamController {
 					questionProperty.add(new QuestionProp(s.getSubjectId(), s.getSubjectName(), listOfExamQuestions.size()));
 				}
 				subjectList.add("<a href='/endExam' class='btn btn-warning navigate-subject' id='submit'>Submit</a>");
-				examTimeFormat = new ExamTimeFormat(0,1,0);
+				examTimeFormat = getTime(settingsService.getSetting().getSessionTime());
 			}
 		}catch(Exception ex) {
 			System.out.println(ex.getMessage());
@@ -187,7 +193,7 @@ public class ExamController {
 			mv.addObject("profileImage", profileImage);
 			mv.addObject("subjectId", subjectId);
 			mv.addObject("Timer", Timer);
-			mv.addObject("maxQuestion", numberOfQuestion);
+			mv.addObject("maxQuestion", settingsService.getSetting().getNumberOfQuestion());
 			mv.addObject("examQuestion", getQuestionBySubject(listOfExamQuestions, subjectId, questionNumber));
 			
 			if(getQuestionBySubject(listOfExamQuestions, subjectId, questionNumber).getOptionSelected() != null) {
@@ -217,7 +223,7 @@ public class ExamController {
 		
 		try {
 			if(listOfExamQuestions == null) {
-				listOfExamQuestions = questionService.getExamQuestion(subjectModelList, numberOfQuestion);
+				listOfExamQuestions = questionService.getExamQuestion(subjectModelList, settingsService.getSetting().getNumberOfQuestion());
 				System.out.println("Question list initialized");
 			}
 		}catch(Exception ex) {
@@ -226,12 +232,24 @@ public class ExamController {
 		return listOfExamQuestions;
 	}
 	
-	@GetMapping("/examquestion/{id}")
-	public List<ExamQuestion> getExamQuestion(@PathVariable int id){
-		StudentModel studentModel = studentService.findById(id);
-		List<SubjectModel> subjectModelList = subjectService.subjectRegistered(studentModel.getCourseModel().getCourseId());
+	@SuppressWarnings("unchecked")
+	@GetMapping("/examquestion/{studentId}")
+	public List<ExamQuestion> getExamQuestion(@PathVariable int studentId) {
 		
-		return questionService.getExamQuestion(subjectModelList, numberOfQuestion);
+		List<SubjectModel> subjectModelList = new ArrayList<>();
+		String courseId = studentService.getCourseId(studentId);
+		
+		if(!courseId.isEmpty()) {
+			
+			String queryString = "SELECT s.subjectId, s.subjectName, s.subjectStatus " + "FROM SubjectModel s "
+					+ "INNER JOIN CourseSubject cs " + "ON s.subjectId = cs.subjectId " + "WHERE cs.courseId = " + courseId;
+			
+			Query query = entityManager.createNativeQuery(queryString, SubjectModel.class);
+			
+			subjectModelList = query.getResultList();
+		}
+		
+		return questionService.getExamQuestion(subjectModelList, settingsService.getSetting().getNumberOfQuestion());
 	}
 	
 	/**
@@ -322,7 +340,7 @@ public class ExamController {
 			studentModel.setStatus(0);
 			studentService.updateStudent(studentModel);
 			questionProperty = questionService.getResult(listOfExamQuestions, questionProperty);
-			emailService.sendSimpleEmail(questionProperty, studentModel);
+			//emailService.sendSimpleEmail(questionProperty, studentModel);
 			endExam = false;
 			startExam = false;
 		}catch(Exception ex) {
@@ -436,4 +454,17 @@ public class ExamController {
         }
         return H + ":" + M + ":" + S;
     }
+	
+	public static ExamTimeFormat getTime(int timeInMinutes) {
+		
+		if(timeInMinutes > 0) {
+			if(timeInMinutes < 60) {
+				return new ExamTimeFormat(0,timeInMinutes,0);
+			}else {
+				return new ExamTimeFormat(timeInMinutes/60, timeInMinutes % 60, 0);
+			}
+		}else {
+			return new ExamTimeFormat(0,1,0);
+		}
+	}
 }

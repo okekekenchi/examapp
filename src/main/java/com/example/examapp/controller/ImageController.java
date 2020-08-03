@@ -25,12 +25,12 @@ public class ImageController {
 	public void getImage(HttpServletRequest request, HttpServletResponse response,  @PathVariable int id)
 			throws ServletException, IOException{
 
-			UserModel user = new StudentModel();
-			user = userService.findById(id);
-			response.setContentType("image/jpeg");
-			ServletOutputStream stream = response.getOutputStream();
-			stream.write(user.getImage());
-			stream.close();
+		UserModel user = new StudentModel();
+		user = userService.findById(id);
+		response.setContentType("image/jpeg");
+		ServletOutputStream stream = response.getOutputStream();
+		stream.write(user.getImage());
+		stream.close();
 	}
 
 }

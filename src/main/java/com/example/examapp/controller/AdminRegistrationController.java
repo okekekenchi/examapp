@@ -70,7 +70,8 @@ public class AdminRegistrationController {
 	        
 			empService.saveEmployee(employeeModel);
 			mv.addObject("employeeModel", new EmployeeModel());
-			mv.addObject("successMessage", "Employee has been registered successfully");		
+			mv.addObject("successMessage", "Employee has been registered successfully");
+			mv.setViewName("login");
 		}else {
 			bindingResult
 			.rejectValue("email", "error.email", bindingResult.toString());

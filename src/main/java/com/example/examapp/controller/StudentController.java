@@ -74,9 +74,10 @@ public class StudentController {
     	if(parameterNames.hasMoreElements()) {
 			studentModel = studentService.findById(Integer.parseInt(request.getParameter("studentId")));
 			studentModel.setOnline(0);
+			studentModel.setStatus(0);
+			studentModel.setTakenTest(0);
 			studentService.saveStudent(studentModel);
     	}
-    	System.out.println(request.getParameter("studentId"));
 	}
 	
 	
@@ -190,7 +191,7 @@ public class StudentController {
 			    			
     			student.setView("<img src='/images/view.png' name='view' id='"+student.getUserId()+"' class='view' alt='View' style='width:25px; height:25px;'>");
     								
-    			student.setProfileImage("<a href='/employeeprofile/"+student.getUserId()+"' ><img src='/images/edit.png' name='image' id='"+student.getUserId()+"' alt='employeeImage' style='zoom:1'/></a>");
+    			student.setProfileImage("<a href='/studentprofile/"+student.getUserId()+"' ><img src='/images/edit.png' name='image' id='"+student.getUserId()+"' alt='Student Image'/></a>");
     		}
     		
     		dataTableResult.setDraw(request.getParameter("draw").toString());

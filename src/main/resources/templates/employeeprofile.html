@@ -3,14 +3,13 @@
 	<head th:insert="header :: head('Employee Profile')">
 	
 	</head>
-	<body>
+	<body style="background: url('/images/adminbackgroundimg.jpg')">
 		<script> AOS.init(); </script>
-	      <div class="main-container" id="wrapper">
+		<div class="main-container" id="wrapper" style="background: rgb(0,0,0,0.8); background-size: cover; height: 100%">
 	      	
 	      	<div class="page-content-wrapper">
 	      	<div class="row col-lg-2 ">
-	      		<button class="btn btn-primary btn-block btn_submit" id="form-toggle">Edit Form</button>
-	      		<button class="btn btn-primary btn-block btn_submit" id="form-toggle">Change Password</button>
+	      		<input type="image" src="/images/edit.png" class="" id="form-toggle" value= "Edit Form" style="margin: 20px 0 0 20px; width: 50px; height: 50px; border-radius: 5px;">
 	      	</div>
 	        	<div class="container-fluid">
 	           	 	<div class="row">
@@ -69,7 +68,11 @@
 								<div>
 									<input type="hidden" id="employeeId" th:field="*{userId}"/>
 									<button type="submit" id="action" class="btn btn-primary btn-block btn_submit" th:utext="EDIT"></button>
-								</div>		
+								</div>	
+							</div>
+							
+							<div class="footer col-sm-9">
+				      			<a href="/changepassword" style="text-decoration: none; color: yellow; font-size: 15px;">Change Password</a>
 							</div>
 							
 							<div class="form-header"></div>

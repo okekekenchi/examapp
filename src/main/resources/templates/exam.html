@@ -67,6 +67,7 @@
 			var token = $("meta[name='_csrf']").attr("content");
 		  	var header = $("meta[name='_csrf_header']").attr("content");
 		  	
+		  	let i = 0;
 			var timer = setInterval(function(){
 				$.ajax({
 					url:"/getExamTime",
@@ -76,10 +77,11 @@
 	                },
 					success:function(data)
 					{
+						console.log(i++);
 						$('#timer').html("<h1>"+data+"</h1>");
 						if(data == "00:00:00"){
 							clearInterval(timer);
-							window.location.replace("/endExam");
+							$(location).attr('href', "/endExam");
 						}
 					}
 				});

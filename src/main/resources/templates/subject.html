@@ -6,7 +6,7 @@
 	<body >
 		<script> AOS.init(); </script>
 		<br/>
-		<div class="container" th:insert="header :: copy"></div>
+		<div th:insert="header :: copy"></div>
 		
 		<div th:utext="${Message}" class="alert alert-info"></div>
 		<div class="row"data-aos="fade-up" data-aos-easing="linear" data-aos-duration="500">
@@ -45,7 +45,7 @@
 						
 	    <div id="subjectModal" class="modal fade" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="800">
 			<div class="modal-dialog">	    	
-    			<form autocomplete="off" action="#" th:action="@{/subject}" 
+    			<form autocomplete="off" action="#" th:action="@{subject}" 
 					th:object="${subjectModel}" method="post" class="form-horizontal"id="subject_form" role="form">
 					<div class="modal-content">
 						<div class="modal-header col-sm-9">
@@ -125,6 +125,7 @@
 						{
 							//$('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');
 							subjectDataTable.ajax.reload();
+							
 						}
 					})
 				}

@@ -22,6 +22,10 @@ public class RoleService {
 		roleRepo.save(roleModel);
 	}
 	
+	public int nRoles() {
+		return (int) roleRepo.count();
+	}
+	
 	public String dataTableQuery(HttpServletRequest request) {
 		String query = "";
 		query += "SELECT * FROM RoleModel ";	

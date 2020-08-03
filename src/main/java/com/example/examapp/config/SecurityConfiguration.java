@@ -25,6 +25,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	UserDetailsService userDetailsService;
+	
+	@Autowired
+	private MyLogoutSuccessHandler myLogoutSuccessHandler;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth)
@@ -36,20 +39,32 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 
-		http.			
+		http.
 			authorizeRequests()
-				.antMatchers("/index", "/settings", "/disablederrorpage", "/assignexamdate").permitAll()
-				.antMatchers("/questionproperty/*", "/registeredstudents").permitAll()
-				.antMatchers("/examquestion/*").permitAll()
-				.antMatchers("/cardverification").permitAll()
-				.antMatchers("/logout").permitAll()
-				.antMatchers("/login","/authenticate").permitAll()
-				.antMatchers("/adminregistration", "/roleregistration", "/employee").permitAll()
-				.antMatchers("/pingenerator").permitAll()
-				.antMatchers("/subject", "/subject/*", "/question", "/question/*", "/course", "/course/*").permitAll()
-				.antMatchers("/student/*","/student", "/admissionlist", "/admissionlist/*").permitAll()
-				.antMatchers( "/employee/*","/role", "/role/*").permitAll()
+				.antMatchers("/").fullyAuthenticated()
+				.antMatchers("/adminregistration/*", "/roleregistration").permitAll()
+				.antMatchers("/studentregistration/*").hasRole("STUDENT")
+				.antMatchers("/admissionlist/*").hasRole("ADMIN")
+				.antMatchers("/registeredstudents/*").hasAnyRole("ADMIN", "USER")
+				.antMatchers("/cardverification/*").permitAll()
+				.antMatchers("/changepassword/*").hasAnyRole("ADMIN", "USER")
+				.antMatchers("/course/*", "/subject/*").hasRole("ADMIN")
+				.antMatchers("/employee/*", "/employeeprofile/*").hasRole("ADMIN")
+				.antMatchers("/settings/*", "/assignexamdate", "/togglesetting").hasRole("ADMIN")
+				.antMatchers("/pingenerator/*").hasRole("VENDOR")
+				.antMatchers("/profile/*").hasAnyRole("ADMIN","USER")
+				.antMatchers("/question/*").hasRole("ADMIN")
+				.antMatchers("/role/*").hasRole("ADMIN")
+				.antMatchers("/endexam", "/examoption", "/getResult").hasRole("STUDENT")
+				.antMatchers("/logout", "/login").permitAll()
+				.antMatchers("/authenticate", "/examquestion/*", "/questionproperty/*").permitAll()
+				.antMatchers("/student/*").hasRole("ADMIN")
+				.antMatchers("/student/*").hasRole("ADMIN")
+				.antMatchers("/studentprofile/*").hasRole("ADMIN")
+				.antMatchers("/disablederrorpage/*").permitAll()
 				.anyRequest().authenticated()
+				.and()
+				.csrf().ignoringAntMatchers("/authenticate","/questionproperty/*", "/examquestion/*")
 				.and()
 				.formLogin()
 					.loginPage("/login")
@@ -62,15 +77,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.logout()
 					.logoutSuccessUrl("/login")
 					.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+					.logoutSuccessHandler(myLogoutSuccessHandler)
 					.invalidateHttpSession(true)
 					.deleteCookies("JSESSIONID")
 					.permitAll()
 					.and()
 				.exceptionHandling()
-					.accessDeniedPage("/access-denied")//"/403"
+					.accessDeniedPage("/access-denied")//"/403".
 					.and()
 				.sessionManagement()
-					.maximumSessions(1)				
+					.maximumSessions(1)
                 .expiredUrl("/login");
 	}
 	

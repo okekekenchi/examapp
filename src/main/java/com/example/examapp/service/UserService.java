@@ -19,4 +19,8 @@ public class UserService {
 	public UserModel findById(int id) {		
 		return userRepo.findById(id);
 	}
+
+	public void saveUser(UserModel userExists) {
+		userRepo.save(userExists);		
+	}
 }

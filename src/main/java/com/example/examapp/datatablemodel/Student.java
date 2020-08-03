@@ -16,7 +16,7 @@ public class Student extends User{
 	public Student(int userId, String firstName, String lastName, String otherName, String email,
 			int status, int online, String courseModel, String image) {		
 		super(userId, firstName, lastName, otherName, email, status, online, image);		
-		this.courseModel = courseModel;		
+		this.courseModel = courseModel;	
 	}
 
 	public Student(int userId, String firstName, String lastName, String otherName, String email,
@@ -24,7 +24,10 @@ public class Student extends User{
 			String profileImage,  String courseModel) {
 		super(userId, firstName, lastName, otherName, email, Status, online,
 				regdate, profileImage);
-		this.courseModel = courseModel;		
+		this.courseModel = courseModel;
+		this.phone = phone;
+		this.gender = gender;
+		this.address = address;
 	}	
 	
 }

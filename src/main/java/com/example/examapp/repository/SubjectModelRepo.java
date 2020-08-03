@@ -16,12 +16,17 @@ public interface SubjectModelRepo extends JpaRepository <SubjectModel, Integer>{
 	
 	SubjectModel findById(int subjectId);
 	
-	static final String FIND_SUBJECTS = "SELECT s FROM SubjectModel s";
+	static final String FIND_SUBJECTS = "SELECT s FROM SubjectModel s WHERE s.subjectStatus = '1'";
 	@Query(value = FIND_SUBJECTS)
 	List<SubjectModel> findAll();
 	
 	static final String DELETE_SUBJECTS =
-			"UPDATE SubjectModel s SET s.subjectStatus = 0 WHERE subjectId = :subjectId";
+			"UPDATE SubjectModel subjectModel SET subjectModel.subjectStatus = 0 WHERE subjectModel.subjectId = :subjectId";
 	@Query(value = DELETE_SUBJECTS)
 	void deleteSubject(@Param("subjectId") int subjectId);
+	
+	static final String GET_nACTIVE_SUBJECTS =
+			"SELECT COUNT(subjectModel) FROM SubjectModel subjectModel WHERE subjectModel.subjectStatus = 1";
+	@Query(value = GET_nACTIVE_SUBJECTS)
+	int nActiveSubjects();
 }

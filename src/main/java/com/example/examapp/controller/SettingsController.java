@@ -36,7 +36,7 @@ public class SettingsController {
 	}
 	
 	@PostMapping(value="/settings")
-	public void saveSettings(HttpServletRequest request) {
+	public String saveSettings(HttpServletRequest request) {
 		Enumeration<String> parameterNames = request.getParameterNames();
 		SettingsModel settingsModel = new SettingsModel();
     	try {
@@ -49,12 +49,14 @@ public class SettingsController {
 				settingsModel.setExamStartTime(String.valueOf(request.getParameter("examStartTime")));
 				settingsModel.setExamEndTime(String.valueOf(request.getParameter("examEndTime")));
 				settingsModel.setSessionTime(Integer.parseInt(request.getParameter("sessionTime")));
+				settingsModel.setNumberOfQuestion(Integer.parseInt(request.getParameter("nQuestion")));
 			}
     	}catch(Exception ex) {
     		System.out.println(ex.getMessage()+" error");
     	}finally {
     		settingsService.Save(settingsModel);
     	}
+		return new Gson().toJson(settingsService.getSettings().get(0));
 	}
 	
 	/**

@@ -19,23 +19,22 @@
 		<link href="/images/logo.png" rel="icon"/>
 		<script src="/js/bootstrap.min.js"></script>
 		<script src="/js/moment.js"></script>
+		<script src="/js/apexcharts.e2e.js"></script>
 	</head>
   <body>  
-    <div th:fragment="copy" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="200" style="z-index:1 !important">
-   		<nav class="navbar navbar-inverse" style="z-index:1 !important">
+    <div th:fragment="copy" >
+   		<nav class="navbar navbar-inverse" style="width: 100%; min-height:70px; border:none; border-radius: 0px;">
 			<div class="container-fluid">
-				<div class="navbar-header">
-					<a href="/" class="navbar-brand">Home</a>
-				</div>
 				<ul class="nav navbar-nav">
-					<li><a th:href="subject" th:text="Subject"></a></li>
-					<li><a th:href="course" th:text="Course"></a></li>
-					<li><a th:href="question" th:text="Question"></a></li>
-					<li><a th:href="role" th:text="Role"></a></li>							
-					<li><a th:href="student" th:text="Student"></a></li>					
-					<li><a th:href="employee" th:text="User"></a></li>
-					<li><a th:href="admissionlist">Admission List</a></li>
-					<li><a th:href="settings">Settings</a></li>
+					<li class="nav-tab"><a href="/" th:text="Dashboard"></a></li>
+					<li class="nav-tab"><a th:href="subject" th:text="Subject"></a></li>
+					<li class="nav-tab"><a th:href="course" th:text="Course"></a></li>
+					<li class="nav-tab"><a th:href="question" th:text="Question"></a></li>
+					<li class="nav-tab"><a th:href="role" th:text="Role"></a></li>				
+					<li class="nav-tab"><a th:href="student" th:text="Student"></a></li>					
+					<li class="nav-tab"><a th:href="employee" th:text="User"></a></li>
+					<li class="nav-tab"><a th:href="admissionlist">Admission List</a></li>
+					<li class="nav-tab"><a th:href="settings" th:text="Settings"></a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right" style="z-index: 2;">
 					<li class="dropdown">

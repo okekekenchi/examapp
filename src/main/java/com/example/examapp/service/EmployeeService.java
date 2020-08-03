@@ -3,9 +3,12 @@ package com.example.examapp.service;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import javax.persistence.Query;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,37 @@ public class EmployeeService {
 	
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	@PersistenceContext
+	private EntityManager entityManager;
+	
+	Query query = null;
+	
+	String queryString = null;
+	
+	public int getActiveEmployees() {
+		queryString= "SELECT * FROM examappdb.getactiveemployees";
+		query = entityManager.createNativeQuery(queryString);
+		return Integer.valueOf(query.getResultList().get(0).toString());
+	}
+	
+	public int getEmployeesOnline() {
+		queryString= "SELECT * FROM examappdb.getEmployeesOnline";
+		query = entityManager.createNativeQuery(queryString);
+		return Integer.valueOf(query.getResultList().get(0).toString());
+	}
+	
+	public int getVendorsOnline() {
+		queryString= "SELECT * FROM examappdb.getVendorsOnline";
+		query = entityManager.createNativeQuery(queryString);
+		return Integer.valueOf(query.getResultList().get(0).toString());
+	}
+	
+	public int getActiveVendors() {
+		queryString= "SELECT * FROM examappdb.getActiveVendors";
+		query = entityManager.createNativeQuery(queryString);
+		return Integer.valueOf(query.getResultList().get(0).toString());
+	}
              
     public EmployeeModel findEmployeeEmail(String email) {
 		return empRepo.findByEmail(email);

@@ -53,6 +53,10 @@ public class SubjectService {
 		return subjectList;
 	}
 	
+	public int activeSubjects(){		
+		return subjectRepo.nActiveSubjects();
+	}
+	
 	public String dataTableQuery(HttpServletRequest request) {
 		String query = "";
 		query += "SELECT * FROM SubjectModel ";	

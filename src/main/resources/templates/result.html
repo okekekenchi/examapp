@@ -49,12 +49,13 @@
 			totalQuestionsPassed = 0;
 			totalQuestionsFailed = 0;
 			
+			
 			$.ajax({
 				url:"/getResult",
 				dataType:"json",
 				success:function(data)
 				{
-					for(var i = 0; i<data.length; i++){
+					for(var i = 0; i < data.length; i++){
 						subjectArray[i] = toCamelCase(data[i].subjectName);
 						subjectScoreArray[i] = data[i].totalScore;
 						totalQuestionsPassed += data[i].totalScore;

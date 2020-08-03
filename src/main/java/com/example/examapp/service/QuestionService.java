@@ -31,9 +31,11 @@ public class QuestionService {
 	public List<QuestionModel> getQuestions() {
 		return questionRepo.findAll();
 	}
+	
 	public QuestionModel findByQuestion(String questionName) {
 		return questionRepo.findByQuestionName(questionName);
 	}
+	
 	public void saveQuestion(@Valid QuestionModel questionModel) {
 		questionRepo.save(questionModel);
 	}
@@ -92,6 +94,7 @@ public class QuestionService {
 					+ subject.get(x).getSubjectId()+" LIMIT 1";
 			
 			query = entityManager.createNativeQuery(queryString);
+			
 			if(query.getResultList().get(0) != null) totalRecords = Integer.parseInt(query.getResultList().get(0).toString());
 			
 			if(totalRecords < numberOfQuestions) numberOfQuestions = totalRecords;
@@ -157,5 +160,9 @@ public class QuestionService {
 			}				
 		}
 		return total;
+	}
+	
+	public int nQuestions() {
+		return (int) questionRepo.count();
 	}
 }

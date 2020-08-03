@@ -6,7 +6,7 @@
 	<body>
 		<script> AOS.init(); </script>
 			<br/>
-		<div class="container" th:insert="header :: copy"></div>
+		<div th:insert="header :: copy"></div>
 	
 		<div th:utext="${Message}" class="alert alert-info"></div>
 		<div class="row">

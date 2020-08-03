@@ -23,15 +23,17 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 import com.example.examapp.model.StudentModel;
 import com.example.examapp.model.SubjectModel;
+import com.example.examapp.model.UserModel;
 import com.example.examapp.service.StudentService;
 import com.example.examapp.service.SubjectService;
+import com.example.examapp.service.UserService;
 
 public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-	@Autowired
-	StudentService studentService;
-	@Autowired
-	SubjectService subjectService;
+	@Autowired StudentService studentService;
+	@Autowired SubjectService subjectService;
+	@Autowired UserService userService;
+	
 	protected final Log logger = LogFactory.getLog(this.getClass());
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
@@ -66,7 +68,10 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 		boolean isVendor = false;
 		int subjectId = 0;
 		List<SubjectModel> subjectList = new ArrayList<>();
-
+		String Username = SecurityContextHolder.getContext().getAuthentication().getName();
+		UserModel userModel = userService.findUserEmail(Username);
+		userModel.setOnline(1);
+		
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 		for (GrantedAuthority grantedAuthority : authorities) {
 			if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
@@ -85,14 +90,22 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 		}
 
 		if (isUser) {
+			userService.saveUser(userModel);
 			return "/student";
-		} else if (isAdmin) {
+		}
+		else if (isAdmin) {
+			userService.saveUser(userModel);
 			return "/";
-		} else if (isStudent) {
-
-			String Username = SecurityContextHolder.getContext().getAuthentication().getName();
+		}
+		else if (isVendor) {
+			userService.saveUser(userModel);
+			return "/pingenerator";
+		}
+		else if (isStudent) {
+			
+			userService.saveUser(userModel);
 			StudentModel studentModel = studentService.findStudentEmail(Username);
-
+			
 			if(studentModel != null) {
 				if(studentModel.getStatus() == 0) {
 					return "/logout"; 
@@ -110,8 +123,6 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 			}
 
 			return "/examquestion/" + subjectId + "/6565";
-		} else if (isVendor) {
-			return "/";
 		} else {
 			return "/";
 		}

@@ -36,15 +36,19 @@ public class CourseService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<CourseModel> getApprovedCourses() {		
+	public List<CourseModel> getApprovedCourses(int i) {		
 		String queryString = "SELECT distinct (c.courseId) , c.courseName, c.courseStatus, c.requiredApplicant " + 
-		 		"FROM courseModel c " + 
-		 		"INNER JOIN coursesubject cs on c.courseId = cs.courseId";
+					 		"FROM courseModel c " + 
+					 		"INNER JOIN coursesubject cs on c.courseId = cs.courseId";
 		
 		Query query = entityManager.createNativeQuery(queryString, CourseModel.class);
 		List<CourseModel> courseList = new ArrayList<>();
 		courseList = query.getResultList();
 		return courseList;
+	}
+	
+	public int nActiveCourses() {
+		return courseRepo.nActiveCourse();
 	}
 	
 	public String dataTableQuery(HttpServletRequest request) {

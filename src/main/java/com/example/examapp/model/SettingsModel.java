@@ -28,35 +28,38 @@ public class SettingsModel {
 	private int settingsId;
 
 	@Column(name="nComputers")
-	private int nComputers; // Number of working computers available in the school
+	private int nComputers;
 	
 	@Column(name="examStartDate")
-	private Date examStartDate; // When the exam will begin. The end date value will be auto generated based on this value
+	private Date examStartDate;
 	
 	@Column(name="examStartTime")
-	private String examStartTime; // When the exam will begin. For example 07:30 AM
+	private String examStartTime;
 	
 	@Column(name="examEndTime")
-	private String examEndTime; // When the will end. For example 05:30 AM
+	private String examEndTime;
 	
 	@Column(name="sessionTime")
-	private int sessionTime; // Total time taken in minutes, to finish an online test.
+	private int sessionTime; 
 	
 	@Column(name="enableStudent")
-	private int enableStudentReg = 1; // Enable student registration
+	private int enableStudentReg = 0;
 	
 	@Column(name="enableEmployee")
-	private int enableEmployeeReg = 1; // Enable employee registration
+	private int enableEmployeeReg = 1;
 	
 	@Column(name="enableRoleReg")
-	private int enableRoleReg = 1; // Enable role Registration
+	private int enableRoleReg = 1;
 	
 	@Column(name="enableExam")
-	private int enableExam = 1; // Enable Online testing
+	private int enableExam = 0;
 	
 	@Column(name="enableCourse")
-	private int enableCourseReg = 1; // Enable course registration
+	private int enableCourseReg = 0;
 	
 	@Column(name="enableSubject")
-	private int enableSubjectReg = 1; // Enable subject registration
+	private int enableSubjectReg = 0;
+	
+	@Column(name="numberOfQuestion")
+	private int numberOfQuestion = 0;
 }

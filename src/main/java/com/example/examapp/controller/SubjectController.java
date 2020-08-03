@@ -38,6 +38,7 @@ public class SubjectController {
 	@GetMapping(value = "/subject")
 	public ModelAndView getSubject(ModelAndView mv) {
 		mv.addObject("subjectModel", new SubjectModel());
+		mv.setViewName("subject");
 		return mv;
 	}
 
@@ -46,11 +47,13 @@ public class SubjectController {
 	public ModelAndView addSubject(@Valid SubjectModel subjectModel, BindingResult bindingResult) {
 		ModelAndView mv = new ModelAndView();
 		SubjectModel subjectExists = subjectService.findBySubject(subjectModel.getSubjectName());
+		
 		if (subjectExists != null) {
 			bindingResult.rejectValue("subjectName", "error.subjectName",
 					"There is already a registered subject similar to the one provided");
 			mv.addObject("Message", "There is already a registered subject similar to the one provided");
 		}
+		
 		if (!bindingResult.hasErrors()) {
 			
 			subjectModel.setSubjectStatus(1);
@@ -58,6 +61,7 @@ public class SubjectController {
 			mv.addObject("subjectModel", new SubjectModel());
 			mv.addObject("Message", "Subject has been added successfully");
 		}
+		
 		return mv;
 	}
 		
