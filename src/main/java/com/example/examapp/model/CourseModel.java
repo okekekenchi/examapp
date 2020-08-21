@@ -36,11 +36,11 @@ public class CourseModel {
 	@Column(name="courseId")
 	private Integer courseId;
 	
-	@Column(name="courseName")
+	@Column(name="courseName", length=50)
 	@NotEmpty(message = "*Please provide a valid course")
 	private String courseName;
 	
-	@Column(name = "courseStatus")
+	@Column(name = "courseStatus", length=1)
 	private Integer courseStatus;
 	
 	@Column(name = "requiredApplicant")

@@ -27,39 +27,39 @@ public class SettingsModel {
 	@Column(name="settingsId")
 	private int settingsId;
 
-	@Column(name="nComputers")
+	@Column(name="nComputers", length=9)
 	private int nComputers;
 	
 	@Column(name="examStartDate")
 	private Date examStartDate;
 	
-	@Column(name="examStartTime")
+	@Column(name="examStartTime", length=7)
 	private String examStartTime;
 	
-	@Column(name="examEndTime")
+	@Column(name="examEndTime", length=7)
 	private String examEndTime;
 	
-	@Column(name="sessionTime")
+	@Column(name="sessionTime", length=5)
 	private int sessionTime; 
 	
-	@Column(name="enableStudent")
+	@Column(name="enableStudent", length=25)
 	private int enableStudentReg = 0;
 	
-	@Column(name="enableEmployee")
+	@Column(name="enableEmployee", length=1)
 	private int enableEmployeeReg = 1;
 	
-	@Column(name="enableRoleReg")
+	@Column(name="enableRoleReg", length=1)
 	private int enableRoleReg = 1;
 	
-	@Column(name="enableExam")
+	@Column(name="enableExam", length=1)
 	private int enableExam = 0;
 	
-	@Column(name="enableCourse")
+	@Column(name="enableCourse", length=1)
 	private int enableCourseReg = 0;
 	
-	@Column(name="enableSubject")
+	@Column(name="enableSubject", length=1)
 	private int enableSubjectReg = 0;
 	
-	@Column(name="numberOfQuestion")
+	@Column(name="numberOfQuestion", length=3)
 	private int numberOfQuestion = 0;
 }

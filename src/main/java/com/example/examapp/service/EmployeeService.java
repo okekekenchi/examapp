@@ -42,18 +42,6 @@ public class EmployeeService {
 		query = entityManager.createNativeQuery(queryString);
 		return Integer.valueOf(query.getResultList().get(0).toString());
 	}
-	
-	public int getVendorsOnline() {
-		queryString= "SELECT * FROM examappdb.getVendorsOnline";
-		query = entityManager.createNativeQuery(queryString);
-		return Integer.valueOf(query.getResultList().get(0).toString());
-	}
-	
-	public int getActiveVendors() {
-		queryString= "SELECT * FROM examappdb.getActiveVendors";
-		query = entityManager.createNativeQuery(queryString);
-		return Integer.valueOf(query.getResultList().get(0).toString());
-	}
              
     public EmployeeModel findEmployeeEmail(String email) {
 		return empRepo.findByEmail(email);

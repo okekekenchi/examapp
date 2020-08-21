@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:insert="header :: head('Exam Questions')">
+	
+	</head>
+	<body>
+		<script> AOS.init(); </script>
+			<br/>
+		<div th:insert="header :: copy"></div>
+	
+		<div th:utext="${Message}" class="alert alert-info"></div>
+		<div class="row">
+			<div class="col-lg-12" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="500">		
+				<div class="panel panel-default">
+	                <div class="panel-heading">
+	                	<div class="row">
+	                    	<div class="col-lg-8 col-md-8 col-sm-8 col-xs-6" data-aos="fade-left" data-aos-easing="linear" data-aos-duration="800">
+	                            <h2 class="panel-title">Question List</h2>
+	                        </div>
+	                        <div class="row col-lg-4 col-md-3 col-sm-2 col-xs-3 mp0" style="display: flex; flex-flow: row;" align="right" >		 
+		                        <form method="POST" enctype="multipart/form-data" th:action="@{/uploadquestion}" data-aos="fade-right" data-aos-easing="linear" data-aos-duration="900">
+		                        	<div style="display: flex; flex-flow: row;">
+										<input type="file" name="file" accept="folder" class="form-control" required style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;"/>
+										<input type="image" src="/images/import.png" class="btn btn-xs" style="width:50px; height:40px; margin-right: 35px; cursor: pointer; border-top-left-radius: 0px; border-bottom-left-radius: 0px;"/>
+									</div>
+									
+								</form>
+								<div  align="right" data-aos="fade-right" data-aos-easing="linear" data-aos-duration="500">
+	                            	<span ><img src="/images/add.png" style='width:40px; height:30px;' class="btn-xs"/><button type="button" name="add" id="add_button" class="btn btn-success btn-sm">Add Question</button></span>    	
+		                        </div>
+	                        </div>
+	                        
+	                    </div>
+	                </div>
+	                <div class="panel-body">
+	                	<table id="paginatedTable" class="table table-bordered table-striped">
+	                		<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>	
+								</tr>
+							</thead>
+	                	</table>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    
+	    <!-- 
+	    ------------- FORM MODAL FOR ADDING QUESTION UNTO THE DATABASE -----------------------------------------------
+	     -->
+						
+	    <div id="questionModal" class="modal fade">
+			<div class="modal-dialog">	    	
+    			<form autocomplete="off" th:action="@{/question}" method="POST" th:object="${questionModel}"
+    				enctype="multipart/form-data" class="form-horizontal" id="question_form" >
+					<div class="modal-content">
+						<div class="modal-header col-sm-9">
+		   					<button style=color:white type="button" class="close" data-dismiss="modal" >&times;</button>
+							<h4 style=color:white class="modal-title"><i class="fa fa-plus"></i>Question Form</h4>
+		   				</div>
+		   				<div class="modal-body col-sm-9">
+		 	   				<div class="form-group">
+								<label th:if="${#fields.hasErrors('questionName')}" th:errors="*{questionName}"
+										class="validation-message"></label>
+								<input type="text" name="questionName" id="questionName" placeholder="Question"
+										class="form-control" /> 
+							</div>
+
+							<div class="form-group">
+								<label	th:if="${#fields.hasErrors('optionA')}" th:errors="*{optionA}"
+										class="validation-message"></label>
+								<input type="text" name="optionA" id="optionA"
+										placeholder="Option A" class="form-control" /> 
+							</div>
+							
+							<div class="form-group">
+								<label	th:if="${#fields.hasErrors('optionB')}" th:errors="*{optionB}"
+										class="validation-message"></label>
+								<input type="text" name="optionB" id="optionB"
+										placeholder="Option B" class="form-control" />
+							</div>
+							
+							<div class="form-group">
+							 	<label th:if="${#fields.hasErrors('optionC')}" th:errors="*{optionC}"
+									class="validation-message"></label>
+								<input type="text" name="optionC" id="optionC"
+								 	placeholder="Option C" class="form-control" />
+							</div>
+							
+							<div class="form-group">
+								<label th:if="${#fields.hasErrors('optionD')}" th:errors="*{optionD}"
+									class="validation-message"></label>
+								<input type="text" name="optionD" id="optionD"
+									placeholder="Option D" class="form-control" />									 
+							</div>
+							
+							
+							<div class="form-group">
+								<label th:if="${#fields.hasErrors('questionAnswer')}" th:errors="*{questionAnswer}"
+										class="validation-message"></label>
+								<input type="text" name="questionAnswer" id="questionAnswer"
+										placeholder="Answer" class="form-control" />
+							</div>
+														
+							<div class="form-group">
+								<label th:if="${#fields.hasErrors('subjectModel')}" th:errors="*{subjectModel}"
+									class="validation-message"></label>
+								<select th:field="*{subjectModel}" class="form-control" id="subjectName">
+									<!-- <option th:value="default" >Select Subject</option> -->
+									<option th:each="subject,row:${subjectList}"
+									th:value="${subject.subjectId}"
+									th:utext="${subject.subjectName}"/>
+								</select>								 
+							</div>
+						
+						</div>
+						<div class="modal-footer col-sm-9">
+							<div class="form-group">
+								<input type="hidden" id="questionId" th:field="*{questionId}"/>
+								<input type="hidden" id="btn_action" />
+								<button type="submit" id="action" class="btn btn-primary btn-block btn_submit"></button>
+							</div>
+						</div>
+					</div>
+				</form>
+	    	</div>
+	    </div>
+    </body>
+
+	<script>	
+		$( document ).ready(function() {
+			var token = $("meta[name='_csrf']").attr("content");
+		  	var header = $("meta[name='_csrf_header']").attr("content");
+		  	
+			var questionDataTable = $('#paginatedTable').DataTable( {
+		        "processing": true,
+		        "serverSide": true,
+		        "pageLength": 10,
+		        "ajax": {
+		            "url": "/questions/paginated/",
+	            	"beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                }
+	            },					
+		        "columns": [
+	                    { "data": "questionId", "name" : "questionId", "title" : "Id"  },
+	                    { "data": "questionName", "name" : "questionName" , "title" : "Question"},
+	                    { "data": "optionA", "name" : "optionA" , "title" : "Option A"},
+	                    { "data": "optionB", "name" : "optionB" , "title" : "Option B"},
+	                    { "data": "optionC", "name" : "optionC" , "title" : "Option C"},
+	                    { "data": "optionD", "name" : "optionD" , "title" : "Option D"},
+	                    { "data": "subjectName", "name" : "subjectName", "title" : "Subject"},               
+	                    { "data": "update", "name" : "update" , "title" : "Update"},
+	                    { "data": "delete", "name" : "delete" , "title" : "Delete"}
+	                ],
+                "columnDefs":[
+        			{
+        				"targets":[6,7,8,],
+        				"orderable":false,
+        			}
+       			]
+			});
+			
+			$('#add_button').click(function(){
+				$('#questionModal').modal('show');
+				$('#question_form')[0].reset();
+				$('.modal-title').html("<i class='fa fa-plus'></i> Add Question");
+				$('#action').html('Add Question');
+			});
+			
+			$(document).on('click','.delete', function(){
+				
+				if(confirm("Are you sure you want to delete question?"))
+				{
+					$.ajax({
+						url:"/question",
+						method:"DELETE",
+		            	"beforeSend": function(xhr) {
+		                    xhr.setRequestHeader(header, token);
+		                },
+						data:{
+							questionId: $(this).attr("id"),
+							questionStatus: $(this).data('status')
+						},
+						success:function(data)
+						{
+							//$('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');
+							questionDataTable.ajax.reload();
+						}
+					})
+				}
+				else
+				{
+					return false;
+				}
+			});
+			 
+			$(document).on('click', '.update', function(){
+			
+				$.ajax({
+					url:"/questions/fetch",
+					method:"POST",
+					data:{
+						questionId: $(this).attr('id')
+					},
+	            	"beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                },
+					dataType:"json",
+					success:function(data)
+					{
+						$('#questionId').val(data.questionId);
+						$('#questionName').val(data.questionName);
+						$('#optionA').val(data.optionA);
+						$('#optionB').val(data.optionB);
+						$('#optionC').val(data.optionC);
+						$('#optionD').val(data.optionD);
+						$('#questionAnswer').val(data.questionAnswer);
+						$('#subjectName').val(data.subjectId);
+						$('.modal-title').html("<i class='fa fa-pencil-square-o'></i> Edit Question");
+						$('#action').html("Edit Question");
+						$('#questionModal').modal('show');
+					}
+				})
+			});
+		});
+	</script>
+</html>

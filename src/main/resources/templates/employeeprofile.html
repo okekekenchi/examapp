@@ -3,62 +3,56 @@
 	<head th:insert="header :: head('Employee Profile')">
 	
 	</head>
-	<body style="background: url('/images/adminbackgroundimg.jpg')">
+	<body style="background: url('/images/adminbackgroundimg.jpg');">
 		<script> AOS.init(); </script>
 		<div class="main-container" id="wrapper" style="background: rgb(0,0,0,0.8); background-size: cover; height: 100%">
 	      	
 	      	<div class="page-content-wrapper">
-	      	<div class="row col-lg-2 ">
-	      		<input type="image" src="/images/edit.png" class="" id="form-toggle" value= "Edit Form" style="margin: 20px 0 0 20px; width: 50px; height: 50px; border-radius: 5px;">
-	      	</div>
+	      		<div class="container-fluid mp0" id="alert_action"></div>
+		      	<div class="row mp0">
+	      			<span><input type="image" src="/images/edit.png" class="form-toggle" style="margin: 20px 0 0 20px; width: 50px; height: 50px;"></span>
+
+	      			<span sec:authorize="hasRole('ROLE_ADMIN')"><a href="/employee"> <input type="image" align="right" src="/images/previous.png" style="margin: 20px 20px 0 20px; border: none; width: 50px; height: 50px;"></a></span>
+	      			<span sec:authorize="hasRole('ROLE_USER')"><a href="/student"> <input type="image" align="right" src="/images/previous.png" style="margin: 20px 20px 0 20px; border: none; width: 50px; height: 50px;"></a></span>
+	            </div>
 	        	<div class="container-fluid">
 	           	 	<div class="row">
 		                <div class="col-lg-12 col-md-12 profile-image" align="center" th:utext="${employee.profileImage}">
 		                	<!---- PROFILE IMAGE GOES HERE  -->
 		               	</div>
-		                <div class="col-md-12 profile-body" style="display: flex; flex-flow: column;">
-		                								
-			                	<span class="profile-label">First Name : <label th:utext="${employee.firstName}"></label></span>
-								<span class="profile-label">Middle Name : <label th:utext="${employee.lastName}"></label></span>
-			                	<span class="profile-label"> Surname : <label th:utext="${employee.otherName}"></label></span>
-		                		<span class="profile-label"> Email : <label th:utext="${employee.email}"></label></span>
-			                	<span class="profile-label">Status : <label th:utext="${employee.validStatus}"></label></span>
-			                	<span class="profile-label">Online : <label th:utext="${employee.onlineStatus}"></label></span>
-			                	<span class="profile-label">Registration Date : <label th:utext="${employee.regdate}"></label></span>
-		                	
+		                <div class="col-md-12 profile-body" style="display: flex; flex-flow: column;">		                								
+		                	<span class="profile-label">First Name : <label th:utext="${employee.firstName}"></label></span>
+							<span class="profile-label">Middle Name : <label th:utext="${employee.lastName}"></label></span>
+		                	<span class="profile-label"> Surname : <label th:utext="${employee.otherName}"></label></span>
+	                		<span class="profile-label"> Email : <label th:utext="${employee.email}"></label></span>
+		                	<span class="profile-label">Status : <label th:utext="${employee.validStatus}"></label></span>
+		                	<span class="profile-label">Online : <label th:utext="${employee.onlineStatus}"></label></span>
+		                	<span class="profile-label">Registration Date : <label th:utext="${employee.regdate}"></label></span>		                	
 		               	</div>
 		            </div>
 				</div>
 			</div>
 			<div class="sidebar-wrapper">
 				<form autocomplete="off" action="#" th:action="@{/employeeprofile}" method="POST" role="form"
-	    			 th:object="${employeeModel}" enctype="multipart/form-data"  id="employee_form" >
+				 id="employee_form" th:object="${employeeModel}">
 								<div class="form-header"></div>
 								
 				   				<div >
-									<label th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
-											class="validation-message"></label>
 									<input type="text" th:field="*{firstName}" id="firstName" placeholder="First Name"
 											class="profile-input" pattern="^\s*([a-zA-Z]+)\s*$"/> 
 								</div>
 	
 								<div>
-									<label	th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
-											class="validation-message"></label>
-									<input type="text" th:field="*{lastName}" id="lastName"
+									<input type="text" th:field="*{lastName}" id="lastName" pattern="^\s*([a-zA-Z]+)\s*$"
 											placeholder="Middle Name" class="profile-input" /> 
 								</div>
 								
 								<div>
-									<label	th:if="${#fields.hasErrors('otherName')}" th:errors="*{otherName}"
-											class="validation-message"></label>
-									<input type="text" th:field="*{otherName}" id="otherName"
+									<input type="text" th:field="*{otherName}" id="otherName" pattern="^\s*([a-zA-Z]+)\s*$"
 											placeholder="Surname" class="profile-input"/>
 								</div>
 								
 								<div>
-									<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-										class="validation-message"></label>
 									<input type="text" th:field="*{email}" id="email"
 										placeholder="Okeke@gmail.com" class="profile-input"/>									 
 								</div>						
@@ -95,36 +89,56 @@
 					}
 				});
 			
-			$(document).on('click','.form-header, .profile-image', function(e){
+			$(document).on('click','.form-header', '#action', function(e){
 				e.preventDefault();
 				$("#wrapper").toggleClass("menuDisplayed");
 			});
 			
-			$(document).on('click','#form-toggle', function(e){
-					e.preventDefault();
-					$("#wrapper").toggleClass("menuDisplayed");
-					
-					var employeeId = $(".studentProfileImage").attr("id");
-					$.ajax({
-						url:"/employeeprofile/fetch/"+employeeId,
-						dataType:"json",
-		            	"beforeSend": function(xhr) {
-		                    xhr.setRequestHeader(header, token);
-		                },
-						success:function(data)
-						{
-							$('#employeeId').val(data.userId);
-							$('#firstName').val(data.firstName);
-							$('#lastName').val(data.lastName);
-							$('#otherName').val(data.otherName);
-							$('#email').val(data.email);
-							$('#phone').val(data.phone);
-							$('#address').val(data.address);
-							$('#gender').val(data.gender);
-							$('#courseModel').val(data.courseModel);
-						}
-					}); 
-				});
+			$(document).on('click','.form-toggle', function(e){
+				
+				e.preventDefault();
+				$("#wrapper").toggleClass("menuDisplayed");
+				
+				var employeeId = $(".userProfileImage").attr("id");
+
+				$.ajax({
+					url:"/employeeprofile/fetch/"+employeeId,
+					dataType:"json",
+	            	"beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                },
+					success:function(data)
+					{
+						$('#employeeId').val(data.userId);
+						$('#firstName').val(data.firstName);
+						$('#lastName').val(data.lastName);
+						$('#otherName').val(data.otherName);
+						$('#email').val(data.email);
+					}
+				}); 
+			});
+			
+			$(document).on('submit','#employee_form', function(event){
+	        	event.preventDefault();
+	        	$('#action').attr('disabled','disabled');
+
+	        	var form_data = $(this).serialize();
+	        	$.ajax({
+	        		url:"/employeeprofile",
+	        		method:"POST",
+	        		data: form_data,
+	        		dataType: "text",
+	        		success:function(data)
+	        		{
+						$('#alert_action').html('<div class="alert alert-info" style="border-radius: none;">'+data+'</div>');
+						$('#alert_action').fadeIn(1000).html('<div class="alert alert-info" style="border-radius: 0px;">'+data+'</div>');
+
+						$('#alert_action').fadeOut(5000).html('<div class="alert" style="border-radius: 0px; background: #f8f8f8">'+data+'</div>');
+			        	$('#action').prop('disabled', false);
+						$("#wrapper").toggleClass("menuDisplayed");
+	        		}
+	        	})
+	        });
 		});
 	</script>
 </html>

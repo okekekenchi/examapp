@@ -61,12 +61,6 @@ public class EmployeeController {
 												ModelAndView mv, HttpServletRequest request,
 												@RequestParam(value="file") MultipartFile image) throws IOException {
 		
-		Enumeration<String> parameterNames = request.getParameterNames();
-		boolean isVendor = false;
-    	if(parameterNames.hasMoreElements()) {
-    		isVendor = String.valueOf(request.getParameter("isVendor")) != null ? true : false;
-    	}
-    	
 		/**
 		 * Converts the file to a byte format and then stores it unto the database
 		 */
@@ -85,10 +79,7 @@ public class EmployeeController {
 			employeeModel.setStatus(1);
 			RoleModel empRole;
 			
-			if(!isVendor)
-				empRole = roleService.roleExists("USER");
-			else
-				empRole = roleService.roleExists("VENDOR");
+			empRole = roleService.roleExists("USER");
 
 			employeeModel.setRoleName(new HashSet<RoleModel>(Arrays.asList(empRole)));
 	        

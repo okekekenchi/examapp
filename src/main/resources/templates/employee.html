@@ -56,17 +56,6 @@
 		   				</div>
 							
 		   				<div class="modal-body col-sm-9">
-		   					<div class="form-group" style="background: #ffffff; border-radius: 4px;">
-		   						<div class="col-sm-10 mp0">
-									<label for="isVendor" class="form-control" style="border: none !important; color: #000000;">
-									Are you a voucher vendor?</label>
-								</div>
-								<div class="col-sm-2 mp0">
-									<input type="checkbox" name="isVendor" id="isVendor" class="form-control"
-									style="border: none !important;" />
-								</div>
-							</div>
-						
 							<div class="form-group">
 								<label th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
 										class="validation-message"></label>
@@ -224,7 +213,6 @@
 		            success:function(data){
 		                $('#employeeDetailModal').modal('show');
 		                $('#employeeDetail').html(data);
-		                location.reload(true);
 		            }
 	        	})
 			});
@@ -237,7 +225,7 @@
 		            method:"POST",
 	            	"beforeSend": function(xhr) {
 	                    xhr.setRequestHeader(header, token);
-	                },			            
+	                },
 		            data:{employeeId:employeeId},
 		            success:function(data){
 		            	employeeDataTable.ajax.reload();

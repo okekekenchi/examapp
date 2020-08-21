@@ -69,9 +69,13 @@ public class MySimpleUrlAuthenticationSuccessHandler implements AuthenticationSu
 		int subjectId = 0;
 		List<SubjectModel> subjectList = new ArrayList<>();
 		String Username = SecurityContextHolder.getContext().getAuthentication().getName();
-		UserModel userModel = userService.findUserEmail(Username);
-		userModel.setOnline(1);
+		UserModel userModel = userService.findUserEmail(Username);		
 		
+		if(userModel.getStatus() == 0) {
+			return "/logout";
+		}
+		
+		userModel.setOnline(1);
 		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
 		for (GrantedAuthority grantedAuthority : authorities) {
 			if (grantedAuthority.getAuthority().equals("ROLE_USER")) {

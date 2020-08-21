@@ -16,6 +16,7 @@ import com.example.examapp.service.SettingsService;
 import com.example.examapp.service.StudentService;
 import com.example.examapp.service.SubjectService;
 import com.example.examapp.service.UserService;
+import com.example.examapp.service.VendorService;
 import com.example.examapp.service.VoucherService;
 
 @RestController
@@ -38,6 +39,8 @@ public class HomeController {
 	@Autowired SettingsService settingsService;
 
 	@Autowired VoucherService voucherService;
+	
+	@Autowired VendorService vendorService;
 
 	@GetMapping(value="/")
 	public ModelAndView getDashboard(ModelAndView mv, DashboardModel dashboard, Authentication authentication){		
@@ -54,8 +57,8 @@ public class HomeController {
 		dashboard.setNemployeeOnline(employeeService.getEmployeesOnline());
 		dashboard.setNcourse(courseService.nActiveCourses());
 		dashboard.setNcomputer(settingsService.getSetting().getNComputers());
-		dashboard.setNvendor(employeeService.getActiveVendors());
-		dashboard.setNvendorOnline(employeeService.getVendorsOnline());
+		dashboard.setNvendor(vendorService.getActiveVendors());
+		dashboard.setNvendorOnline(vendorService.getVendorsOnline());
 		dashboard.setNvoucher(voucherService.getnVouchers());
 		dashboard.setNvoucherUsed(voucherService.getnVouchersUsed());
 		dashboard.setNsubject(subjectService.activeSubjects());

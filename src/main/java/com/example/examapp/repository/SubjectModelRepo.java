@@ -12,9 +12,15 @@ import com.example.examapp.model.SubjectModel;
 @Repository
 public interface SubjectModelRepo extends JpaRepository <SubjectModel, Integer>{
 	
-	SubjectModel findBySubjectName(String subject_name);
+	static final String FIND_BY_SUBJECT =
+			"SELECT s FROM SubjectModel s WHERE s.subjectName = :subjectName AND s.subjectStatus = '1'";
+	@Query(value = FIND_BY_SUBJECT)
+	SubjectModel findBySubjectName(@Param("subjectName") String subjectName);
 	
-	SubjectModel findById(int subjectId);
+	static final String FIND_BY_ID =
+			"SELECT s FROM SubjectModel s WHERE s.subjectId = :subjectId AND s.subjectStatus = '1'";
+	@Query(value = FIND_BY_ID)
+	SubjectModel findById(@Param("subjectId") int subjectId);
 	
 	static final String FIND_SUBJECTS = "SELECT s FROM SubjectModel s WHERE s.subjectStatus = '1'";
 	@Query(value = FIND_SUBJECTS)

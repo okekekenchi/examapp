@@ -34,7 +34,7 @@
 									<th></th>
 									<th></th>
 									<th></th>
-									<th></th>	
+									<span sec:authorize="hasRole('ROLE_ADMIN')"><th></th></span>
 								</tr>
 							</thead>
 	                	</table>
@@ -64,10 +64,38 @@
         
     </body>
 
-	<script>	
+	<script th:inline="javascript">	
 		$( document ).ready(function() {
 			var token = $("meta[name='_csrf']").attr("content");
 		  	var header = $("meta[name='_csrf_header']").attr("content");
+		  	var target = [];
+		  	var columns = [
+            	{ "data": "userId", "name" : "studentId", "title" : "Id"  },
+                { "data": "firstName", "name" : "firstName" , "title" : "First Name"},
+                { "data": "lastName", "name" : "lastName" , "title" : "Last Name"},
+                { "data": "otherName", "name" : "otherName" , "title" : "Other Name"},
+                { "data": "email", "name" : "email" , "title" : "Email"},
+                { "data": "courseModel", "name" : "courseModel" , "title" : "Course"},
+                { "data": "onlineStatus", "name" : "student", "title" : "Online"},
+                { "data": "validStatus", "name" : "validStatus" , "title" : "Status"},
+                { "data": "view", "name" : "view" , "title" : "View"},
+        		{ "data": "profileImage", "name" : "profileImage" , "title" : "Profile"},
+                { "data": "logout", "name" : "logout" , "title" : "Logout"},
+                { "data": "delete", "name" : "delete" , "title" : "Delete"}
+            ];
+		  	
+		  	/*<![CDATA[*/
+		  		
+		  		let isAdmin = /*[[${isAdmin}]]*/
+		  		if(!isAdmin){
+		  			target = [0,8,9,10];
+		  			columns.splice(11, 1);
+		  		}else{
+		  			target = [0,8,9,10,11];
+		  		}
+		  		
+		  	/*]]>*/
+		  	
 		  	
 			var studentDataTable = $('#paginatedTable').DataTable( {
 		        "processing": true,
@@ -79,24 +107,11 @@
 	                    xhr.setRequestHeader(header, token);
 	                }
 	            },				
-		        "columns": [
-                    	{ "data": "userId", "name" : "studentId", "title" : "Id"  },
-	                    { "data": "firstName", "name" : "firstName" , "title" : "First Name"},
-	                    { "data": "lastName", "name" : "lastName" , "title" : "Last Name"},
-	                    { "data": "otherName", "name" : "otherName" , "title" : "Other Name"},
-	                    { "data": "email", "name" : "email" , "title" : "Email"},
-	                    { "data": "courseModel", "name" : "courseModel" , "title" : "Course"},
-	                    { "data": "onlineStatus", "name" : "student", "title" : "Online"},
-	                    { "data": "validStatus", "name" : "validStatus" , "title" : "Status"},
-	                    { "data": "view", "name" : "view" , "title" : "View"},
-		        		{ "data": "profileImage", "name" : "profileImage" , "title" : "Profile"},
-	                    { "data": "logout", "name" : "logout" , "title" : "Logout"},
-	                    { "data": "delete", "name" : "delete" , "title" : "Delete"}
-	                ],
+		        "columns": columns,
                 "columnDefs":[
         			{
-        				"targets":[0,8,9,10,11],
-        				"orderable":false,
+        				"targets": target,
+        				"orderable": false,
         			}
        			]
 			});
@@ -144,6 +159,7 @@
 			
 			 $(document).on('click', '.logout', function(){
 	        	var studentId = $(this).attr("id");
+	        	alert(studentId);
 		        $.ajax({
 		            url:"student/logout",
 		            method:"POST",

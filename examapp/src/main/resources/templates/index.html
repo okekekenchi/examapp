@@ -1,0 +1,299 @@
+<!--
+ https://github.com/puikinsh/sufee-admin-dashboard
+ -->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <title>Admin Dashboard</title>
+	    <meta name="description" content="Admin Dashboard">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="/css/db/css/normalize.css">
+		<link rel="stylesheet" href="/css/db/css/animate.css">
+		<link rel="stylesheet" href="/css/db/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/css/db/css/font-awesome.min.css">
+		<link rel="stylesheet" href="/css/db/css/themify-icons.css">
+		<link rel="stylesheet" href="/css/db/css/flag-icon.min.css">
+		<link rel="stylesheet" href="/css/db/css/cs-skin-elastic.css">
+		<link rel="stylesheet" href="css/db/css/style.css">
+		<link rel="stylesheet" href="/css/examapp.css"/>
+	</head>
+		
+	<body>
+	
+	    <aside id="left-panel" class="left-panel">
+	        <nav class="navbar navbar-expand-sm navbar-default">
+	
+	            <div class="navbar-header" style="overflow: hidden; max-height: 50px;">
+	                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
+	                    <i class="fa fa-bars"></i>
+	                </button>
+	                <br>
+	                <h4 class="text-white" th:utext="|Hi ${dashboard.username}|"></h4>
+	            </div>
+	            <br>
+	            <div id="main-menu" class="main-menu collapse navbar-collapse">
+	                <ul class="nav navbar-nav">
+	                    <li class="active">
+	                        <a href="/"> <i class="menu-icon fa fa-dashboard"></i>Dashboard</a>
+	                    </li>
+	                    <h3 class="menu-title">Admin Sections</h3><!-- /.menu-title -->
+	                    <li class="menu-item">
+	                        <a href="subject"> <i class="menu-icon fa fa-pencil-square-o"></i>Subject</a>
+	                    </li>
+	
+	                    <li class="menu-item">
+	                        <a href="course"> <i class="menu-icon fa fa-pencil-square-o"></i>Course</a>
+	                    </li>
+	
+	                    <li class="menu-item">
+	                        <a href="question"> <i class="menu-icon fa fa-pencil-square-o"></i>Question</a>
+	                    </li>
+	
+	                    <li class="menu-item">
+	                        <a href="role"> <i class="menu-icon fa fa-laptop"></i>Role</a>
+	                    </li>
+	
+	                    <li class="menu-item">
+	                        <a href="student"> <i class="menu-icon fa fa-users"></i>Student</a>
+	                    </li>
+	
+	                    <li class="menu-item">
+	                        <a href="employee"> <i class="menu-icon fa fa-users"></i>User</a>
+	                    </li>
+	
+	                    <li class="menu-item">
+	                        <a href="admissionlist"> <i class="menu-icon fa fa-list"></i>Admission List</a>
+	                    </li>
+	
+	                    <li class="menu-item">
+	                        <a href="changepassword"> <i class="menu-icon fa fa-lock"></i>Change Password</a>
+	                    </li>
+	
+	                    <li class="menu-item">
+	                        <a href="settings"> <i class="menu-icon fa fa-gear"></i>Settings</a>
+	                    </li>
+	
+	                </ul>
+	            </div>
+	        </nav>
+	    </aside>
+
+	
+	    <div id="right-panel" class="right-panel">
+	    	
+	    	<header id="header" class="header">
+	    	
+				<div class="header-menu">
+					<div class="col-sm-7">
+						<a id="menuToggle" class="menutoggle pull-left"><i class="fa fa fa-tasks"></i></a>
+					</div>
+				</div>
+				
+				<div class="col-sm-5 float-right">
+	
+	                <div class="user-area dropdown float-right">
+	                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+	                    	th:utext="${dashboard.profile}">
+	                    </a>
+	
+	                    <div class="user-menu dropdown-menu">
+	                        <a class="nav-link" href="profile"><i class="fa fa-user"></i> My Profile</a>
+	
+	                        <a class="nav-link" href="settings"><i class="fa fa-cog"></i> Settings</a>
+	
+	                        <a class="nav-link" href="/logout"><i class="fa fa-power-off"></i> Logout</a>
+	                    </div>
+	                </div>
+	            </div>
+			</header>	    	
+	
+	        <div class="breadcrumbs">
+	            <div class="col-sm-4">
+	                <div class="page-header float-left">
+	                    <div class="page-title">
+	                        <h1>Dashboard</h1>
+	                    </div>
+	                </div>
+	            </div>	            
+	        </div>
+	
+	        <div class="content mt-3">
+	            <div class="col-sm-6 col-lg-3">
+	                <div class="card text-white bg-flat-color-2" style="border: none;">
+	                    <div class="card-body pb-0" style="height:150px; background: #5c4c34;">
+	                        <div class="dropdown float-right">
+	                        </div>
+	                        <h3 class="mb-0"><span class="count" th:utext="${dashboard.nsubject}"></span></h3>
+	                        <p class="text-light">Subjects</p>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="col-sm-6 col-lg-3">
+	                <div class="card text-white bg-flat-color-2" style="border: none;">
+	                    <div class="card-body pb-0" style="height:150px; background: #00aced;">
+	                        <div class="dropdown float-right">
+	                        </div>
+	                        <h3 class="mb-0"><span class="count" th:utext="${dashboard.ncourse}"></span></h3>
+	                        <p class="text-light">Courses</p>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="col-sm-6 col-lg-3">
+	                <div class="card text-white bg-flat-color-2" style="border: none;">
+	                    <div class="card-body pb-0" style="height:150px; background: #029658;">
+	                        <div class="dropdown float-right">
+	                        </div>
+	                        <h3 class="mb-0"><span class="count" th:utext="${dashboard.nquestion}"></span></h3>
+	                        <p class="text-light">Questions</p>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="col-sm-6 col-lg-3">
+	                <div class="card text-white bg-flat-color-2">
+	                    <div class="card-body pb-0" style="height:150px; background: #2c2c24;">
+	                        <div class="dropdown float-right">
+	                        </div>
+	                        <h3 class="mb-0"><span class="count" th:utext="${dashboard.nemployee}"></span></h3>
+	                        <p class="text-light">Users</p>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="col-sm-6 col-lg-3">
+	                <div class="card text-white bg-flat-color-2" style="border: none;">
+	                    <div class="card-body pb-0" style="height:150px; background: #d34836;">
+	                        <div class="dropdown float-right">
+	                        </div>
+	                        <h3 class="mb-0"><span class="count" th:utext="${dashboard.ncomputer}"></span></h3>
+	                        <p class="text-light">Computers Available</p>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="col-sm-6 col-lg-2">
+	                <div class="card text-white bg-flat-color-2" style="border: none;">
+	                    <div class="card-body pb-0" style="height:150px; background: #040c1c;">
+	                        <div class="dropdown float-right">
+	                        </div>
+	                        <h3 class="mb-0"><span class="count" th:utext="${dashboard.nvendor}"></span></h3>
+	                        <p class="text-light">Vendors</p>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="col-sm-6 col-lg-2">
+	                <div class="card text-white bg-flat-color-2" style="border: none;">
+	                    <div class="card-body pb-0" style="height:150px; background: #2c544c;">
+	                        <div class="dropdown float-right">
+	                        </div>
+	                        <h3 class="mb-0"><span class="count" th:utext="${dashboard.nrole}"></span></h3>
+	                        <p class="text-light">Roles</p>
+	                    </div>
+	                </div>
+	            </div>
+		            
+	            <div class="col-sm-6 col-lg-2">
+	                <div class="card text-white bg-flat-color-2" style="border: none;">
+	                    <div class="card-body pb-0" style="height:150px; background: #2c2c24;">
+	                        <div class="dropdown float-right">
+	                        </div>
+	                        <h3 class="mb-0"><span class="count" th:utext="${dashboard.nstudent}"></span></h3>
+	                        <p class="text-light">Students</p>
+	                    </div>
+	                </div>
+	            </div>
+				
+				<div class="col-sm-6 col-lg-3">
+	                <div class="card text-white bg-flat-color-2" style="border: none;">
+	                    <div class="card-body pb-0" style="height:150px; background: #2c2c24;">
+	                        <div class="dropdown float-right">
+	                        </div>
+	                        <h3 class="mb-0"><span class="count" th:utext="${dashboard.nvoucher}"></span></h3>
+	                        <p class="text-light">Vouchers Purchased</p>
+	                    </div>
+	                </div>
+	            </div>
+	            
+	            <div class="col-lg-6">
+	                <div class="card">
+	                    <div class="card-body pb-0" style="height:330px; background: #2c2c24;" height="330">
+	                        <h4 class="mb-3" style="color:#ffffff;">Yearly Report</h4>
+	                        <canvas id="sales-chart"></canvas>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="col-xl-3 col-lg-6">
+	                <div class="card">
+	                    <div class="card-body pb-0" style="height:150px; background: #2c2c24;" height="150">
+	                        <div class="stat-widget-one">
+	                            <div class="stat-icon dib"><i class="ti-user text-success border-success"></i></div>
+	                            <div class="stat-content dib">
+	                                <div class="stat-text" style="color:#ffffff;">Users Online</div>
+	                                <div class="stat-digit" style="color:#ffffff;" th:utext="${dashboard.nemployeeOnline}">1,012</div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="col-xl-3 col-lg-6">
+	                <div class="card">
+	                    <div class="card-body pb-0" style="height:150px; background: #2c2c24;" height="150">
+	                        <div class="stat-widget-one">
+	                            <div class="stat-icon dib"><i class="ti-credit-card text-primary border-primary"></i></div>
+	                            <div class="stat-content dib">
+	                                <div class="stat-text" style="color:#ffffff;">Vouchers used</div>
+	                                <div class="stat-digit" style="color:#ffffff;" th:utext="${dashboard.nvoucherUsed}">961</div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="col-xl-3 col-lg-6">
+	                <div class="card">
+	                    <div class="card-body pb-0" style="height:150px; background: #2c2c24;" height="150">
+	                        <div class="stat-widget-one">
+	                            <div class="stat-icon dib"><i class="ti-user text-warning border-warning"></i></div>
+	                            <div class="stat-content dib">
+	                                <div class="stat-text" style="color:#ffffff;">Students Online</div>
+	                                <div class="stat-digit" style="color:#ffffff;" th:utext="${dashboard.nstudentOnline}">770</div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="col-xl-3 col-lg-6">
+	                <div class="card">
+	                    <div class="card-body pb-0" style="height:150px; background: #2c2c24;" height="150">
+	                        <div class="stat-widget-one">
+	                            <div class="stat-icon dib"><i class="ti-user text-success border-success"></i></div>
+	                            <div class="stat-content dib">
+	                                <div class="stat-text" style="color:#ffffff;">Vendors Online</div>
+	                                <div class="stat-digit" style="color:#ffffff;" th:utext="${dashboard.nvendorOnline}">1,012</div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	
+	        </div> <!-- .content -->
+	    </div><!-- /#right-panel -->
+	
+	    <!-- Right Panel -->
+	    <script src="/js/db/vendor/jquery-2.1.4.min.js" type="text/javascript"></script>
+ 		<script src="/js/db/popper.js" type="text/javascript"></script>
+		<script src="/js/db/plugins.js" type="text/javascript"></script>
+		<script src="/js/db/main.js" type="text/javascript"></script>
+		<script src="/js/db/chart-js/Chart.bundle.min.js" type="text/javascript"></script>
+		<script src="/js/db/chart-js/chartjs-init.js" type="text/javascript"></script>
+		<script src="/js/db/dashboard.js" type="text/javascript"></script>
+	</body>
+</html>

@@ -51,34 +51,34 @@ public class UserModel {
 	@Column(name = "userId")
 	private Integer userId;
 	
-	@Column(name = "firstName")
+	@Column(name = "firstName", length=25)
 	@Length(min = 2, max = 25, message = "*Your first name must have at least 2 and a maximum of 25 characters")
 	@NotEmpty(message = "*Please provide your first name")
 	private String firstName;
 	
-	@Column(name = "lastName")
+	@Column(name = "lastName", length=25)
 	@Length(min = 2, max = 25, message = "*Your last name must have at least 2 and a maximum of 25 characters")
 	@NotEmpty(message = "*Please provide your last name")
 	private String lastName;
 	
-	@Column(name = "otherName", nullable=true)
+	@Column(name = "otherName", nullable=true, length=25)
 	private String otherName;
 	
-	@Column(name = "email")
+	@Column(name = "email", length=150)
 	@Email(message = "*Please provide a valid Email")
 	@NotEmpty(message = "*Please provide an email")
 	private String email;
 	
-	@Column(name = "password")
-	@Length(min = 5, message = "*Your password must have at least 5 characters")
+	@Column(name = "password", length=255)
+	@Length(min = 6, message = "*Your password must have at least 6 characters")
 	@NotEmpty(message = "*Please provide your password")
 	@Transient
 	private String password;	
 
-	@Column(name = "status")
+	@Column(name = "status", length=1)
 	private int status;
 	
-	@Column(name = "online")
+	@Column(name = "online", length=1)
 	private int online;
 	
 	@Lob

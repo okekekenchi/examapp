@@ -25,8 +25,11 @@ public class RoleModel {
 	@Column(name="roleId")
 	private int roleId;
 	
-	@Column(name="roleName")
+	@Column(name="roleName", length=25)
 	@NotEmpty(message = "*Please provide a valid role")
 	private String roleName;
+	
+	@Column(name = "roleStatus", nullable=false, length=1)
+	private Integer roleStatus;
 }
 

@@ -39,16 +39,15 @@ public class LoginController {
 	@Autowired UserService userService;
 
 	@GetMapping(value="/login")
-	public ModelAndView Login(ModelAndView mv, HttpServletResponse response,
-								Authentication authentication) throws IOException, ServletException {
-		if(authentication != null) {
-			
-			UserModel userModel = userService.findUserEmail(authentication.getName());
-			userModel.setOnline(0);
-			userService.saveUser(userModel);
-		}
+	public ModelAndView Login(ModelAndView mv) {	
 		
-		mv.setViewName("/login");
+		return mv;
+	}
+	
+	@PostMapping(value="/login?error")
+	public ModelAndView login(ModelAndView mv) {
+
+		mv.addObject("loginError", true);
 		return mv;
 	}
 	

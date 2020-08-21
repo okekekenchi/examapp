@@ -1,0 +1,239 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:insert="header :: head('Vendor')">
+	
+	</head>
+	<body >
+		<script> AOS.init(); </script>
+		<br/>
+		<div th:insert="header :: copy" style="z-index:10 !important">		
+		</div>	
+		<div th:utext="${Message}" class="alert alert-info"></div>
+		<div class="row" style="z-index:-1 !important">
+			<div class="col-lg-12" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="500">
+				<div class="panel panel-default">
+	                <div class="panel-heading">
+	                	<div class="row">
+	                    	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-6">
+	                            <h3 class="panel-title" data-aos="fade-left" data-aos-easing="linear" data-aos-duration="800">User List</h3>
+	                        </div>
+	                         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6" align="right" data-aos="fade-right" data-aos-easing="linear" data-aos-duration="1000">
+	                            <span ><img src="/images/add.png" style='width:40px; height:30px;' class="btn-xs"/><button type="button" name="add" id="add_button" class="btn btn-success btn-sm" >Add User</button></span>    	
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="panel-body">
+	                	<table id="paginatedTable" class="table table-bordered table-striped">
+	                		<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>	
+								</tr>
+							</thead>
+	                	</table>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    
+	    <div id="vendorModal" class="modal fade">
+			<div class="modal-dialog">	    	
+    			<form autocomplete="off" action="#" th:action="@{/vendor}" enctype="multipart/form-data"
+					th:object="${vendorModel}" method="post" class="form-horizontal"id="vendor_form" role="form">
+					<div class="modal-content">
+						<div class="modal-header col-sm-9">
+		   					<button style=color:white type="button" class="close" data-dismiss="modal" >&times;</button>
+							<h4  style=color:white class="modal-title"><i class="fa fa-plus"></i>Vendor Form</h4>
+		   				</div>
+							
+		   				<div class="modal-body col-sm-9">
+		   											
+							<div class="form-group">
+								<label th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
+										class="validation-message"></label>
+								<input type="text" th:field="*{firstName}" id="firstName" placeholder="First Name"
+										class="form-control" /> 
+							</div>
+	
+							<div class="form-group">
+								<label	th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+										class="validation-message"></label>
+								<input type="text" th:field="*{lastName}" id="lastName"
+										placeholder="Other Name" class="form-control" /> 
+							</div>
+							
+							<div class="form-group">
+								<label	th:if="${#fields.hasErrors('otherName')}" th:errors="*{otherName}"
+										class="validation-message"></label>
+								<input type="text" th:field="*{otherName}" id="otherName"
+										placeholder="Surname" class="form-control" />
+							</div>
+							
+							<div class="form-group">
+								<label th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+									class="validation-message"></label>
+								<input type="text" th:field="*{email}" id="email"
+									placeholder="Okeke@gmail.com" class="form-control" />									 
+							</div>
+							
+							
+							<div class="form-group">
+								<label th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+										class="validation-message"></label>
+								<input type="password" th:field="*{password}" id="password"
+										placeholder="Password" class="form-control" />
+							</div>
+							
+							<div class="form-group">
+								<input type="file" name="file" accept=".jpg,.png,.jpeg"	id="image"
+									class="form-control" required/>
+							</div>
+						</div>
+						<div class="modal-footer col-sm-9">
+							<div class="form-group" align="center">
+								<input type="hidden" id="vendorId" th:field="*{userId}"/>
+								<input type="hidden" id="btn_action" />
+								<button type="submit" id="action" class="btn btn-success btn-xs verify-pin">Submit</button>
+							</div>
+						</div>
+					</div>
+				</form>
+	    	</div>
+	    </div>
+	    	    
+	    <div id="vendorDetailModal" class="modal fade">
+            <div class="modal-dialog">
+                <form method="post" id="vendordetail_form">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title"><i class="fa fa-plus"></i> Vendor Detail</h4>
+                        </div>
+                        <div class="modal-body">
+                            <Div id="vendorDetail"></Div>
+                        </div>
+                        <div class="modal-footer">                            
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </body>
+
+	<script>	
+		$( document ).ready(function() {
+			
+		 	var token = $("meta[name='_csrf']").attr("content");
+		  	var header = $("meta[name='_csrf_header']").attr("content");
+			  
+			var vendorDataTable = $('#paginatedTable').DataTable( {
+		        "processing": true,
+		        "serverSide": true,
+		        "pageLength": 10,
+		        "ajax": {
+		            "url": "/vendor/paginated/",
+	            	"beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                }
+	            },					
+		        "columns": [
+                    	{ "data": "userId", "name" : "vendorId", "title" : "Id"  },
+	                    { "data": "firstName", "name" : "firstName" , "title" : "First Name"},
+	                    { "data": "lastName", "name" : "lastName" , "title" : "Last Name"},
+	                    { "data": "otherName", "name" : "otherName" , "title" : "Other Name"},
+	                    { "data": "email", "name" : "email" , "title" : "Email"},
+	                    { "data": "onlineStatus", "name" : "vendor", "title" : "Online"},
+	                    { "data": "validStatus", "name" : "validStatus" , "title" : "Status"},
+	                    { "data": "view", "name" : "view" , "title" : "View"},
+		        		{ "data": "profileImage", "name" : "profileImage" , "title" : "Profile"},
+	                    { "data": "logout", "name" : "logout" , "title" : "Logout"},
+	                    { "data": "delete", "name" : "delete" , "title" : "Delete"}
+	                ],
+                "columnDefs":[
+        			{
+        				"targets":[0,8,9,10],
+        				"orderable":false,
+        			}
+       			]
+			});
+			
+			$('#add_button').click(function(){
+				$('#vendorModal').modal('show');
+				$('#vendor_form')[0].reset();
+				$('.modal-title').html("<i class='fa fa-plus'></i> Add Vendor");
+				$('#action').html('Add User');
+			});
+			
+			$(document).on('click','.delete', function(){
+				var vendorId = $(this).attr("id");
+				var vendorStatus = $(this).data('status');
+				if(confirm("Are you sure you want to delete User?"))
+				{
+					$.ajax({
+						url:"/vendor",
+						method:"DELETE",
+		            	"beforeSend": function(xhr) {
+		                    xhr.setRequestHeader(header, token);
+		                },
+						data:{vendorId:vendorId, vendorStatus:vendorStatus},
+						success:function(data)
+						{
+							//$('#alert_action').fadeIn().html('<div class="alert alert-info">'+data+'</div>');
+							vendorDataTable.ajax.reload();
+							location.reload(true);
+						}
+					})
+				}
+				else
+				{
+					return false;
+				}
+			});
+			
+			$(document).on('click', '.view', function(){
+				 
+	        	var vendorId = $(this).attr("id");
+		        $.ajax({
+		            url:"vendor/view",
+		            method:"POST",
+	            	"beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                },
+		            data:{vendorId:vendorId},
+		            success:function(data){
+		                $('#vendorDetailModal').modal('show');
+		                $('#vendorDetail').html(data);
+		            }
+	        	})
+			});
+			
+			 $(document).on('click', '.logout', function(){
+			
+	        	var vendorId = $(this).attr("id");
+		        $.ajax({
+		            url:"vendor/logout",
+		            method:"POST",
+	            	"beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                },			            
+		            data:{vendorId:vendorId},
+		            success:function(data){
+		            	vendorDataTable.ajax.reload();
+		            	location.reload(true);
+		            }
+	        	})
+			});
+		});
+	</script>
+</html>

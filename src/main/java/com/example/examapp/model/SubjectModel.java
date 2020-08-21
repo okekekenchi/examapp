@@ -28,10 +28,10 @@ public class SubjectModel {
 	@Column(name="subjectId")
 	private Integer subjectId;
 	
-	@Column(name="subjectName")
+	@Column(name="subjectName", length=50)
 	private String subjectName;
 	
-	@Column(name = "subjectStatus", nullable=false)
+	@Column(name = "subjectStatus", nullable=false, length=1)
 	private Integer subjectStatus;
 	
 	@OneToMany(mappedBy="subjectModel")

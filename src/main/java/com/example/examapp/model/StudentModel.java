@@ -30,22 +30,24 @@ import lombok.Setter;
 @PrimaryKeyJoinColumn(name="studentId")
 public class StudentModel extends UserModel{
 	
-	@Column(name = "phone")
+	@Column(name = "phone", length=14)
+	@Length(min = 10, message = "*invalid phone number")
 	@NotEmpty(message = "*Please provide a phone number")
 	private String phone;
 	
-	@Column(name = "address")
+	@Column(name = "address", length=100)
 	@Length(min = 10, message = "*Your Address must have at least 10 characters")
 	@NotEmpty(message = "*Please provide a valid residential address")
 	private String address;
 
 	@Column(name = "gender", length=6)
+	@NotEmpty(message = "*Please select your gender")
 	private String gender;		
 	
-	@Column(name = "studentScore")
+	@Column(name = "studentScore", length=5)
 	private  int studentScore;
 
-	@Column(name = "takenTest")
+	@Column(name = "takenTest", length=1)
 	private  int takenTest;
 	
 	@Temporal(TemporalType.DATE)

@@ -1,18 +1,18 @@
 package com.example.examapp.controller;
 
+import java.util.Enumeration;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.examapp.datatablemodel.Employee;
 import com.example.examapp.model.EmployeeModel;
@@ -52,31 +52,39 @@ public class EmployeeProfileController {
 			employee.setOnlineStatus("<img src='/images/offline.png' alt='Inactive' style='width:30px; height:30px;' />");
 		}
 		employee.setProfileImage("<img src='/Image/" + id + "' name='image' id='" + id
-				+ "' alt='employeeImage' class='img-rounded studentProfileImage'/>");
+				+ "' alt='employeeImage' class='img-rounded userProfileImage'/>");
 
 		mv.addObject("employee", employee);
 		mv.addObject("employeeModel", new EmployeeModel());
 		mv.setViewName("employeeprofile");
 		return mv;
 	}
+	
+	@GetMapping(value = "/employeeprofile")
+	public ModelAndView getEmployeeProfile(ModelAndView mv) {
+		
+		String Username = SecurityContextHolder.getContext().getAuthentication().getName();
+		EmployeeModel employeeModel = empService.findEmployeeEmail(Username);
+		return employeeProfile(mv, employeeModel.getUserId());
+	}
 
 	@PostMapping(value = "/employeeprofile")
-	public RedirectView updateEmployeeDetail(@Valid @ModelAttribute("employeeModel") EmployeeModel employeeModel,
-			BindingResult bindingResult, ModelAndView mv) {
+	public String updateEmployeeDetail(HttpServletRequest request, EmployeeModel employeeUpdate) {
+		
+		Enumeration<String> parameterNames = request.getParameterNames();
 
-		EmployeeModel employeeUpdate = empService.findById(employeeModel.getUserId());
-
-		employeeUpdate.setFirstName(employeeModel.getFirstName());
-		employeeUpdate.setLastName(employeeModel.getLastName());
-		employeeUpdate.setOtherName(employeeModel.getOtherName());
-		employeeUpdate.setEmail(employeeModel.getEmail());
-		if (!bindingResult.hasErrors()) {
+    	if(parameterNames.hasMoreElements()) {
+    		
+    		employeeUpdate = empService.findById(Integer.parseInt(request.getParameter("userId")));
+    		employeeUpdate.setFirstName(String.valueOf(request.getParameter("firstName")));
+    		employeeUpdate.setLastName(String.valueOf(request.getParameter("lastName")));
+    		employeeUpdate.setOtherName(String.valueOf(request.getParameter("otherName")));
+    		employeeUpdate.setEmail(String.valueOf(request.getParameter("email")));
 			empService.updateEmployee(employeeUpdate);
-			mv.addObject("successMessage", "Employee has been registered successfully");
-		} else {
-			bindingResult.rejectValue("email", "error.email", bindingResult.toString());
-		}
-		return new RedirectView("/employeeprofile/"+employeeModel.getUserId());
+    		
+    	}
+		String msg = "Update Successful";
+		return new Gson().toJson(msg);
 	}
 
 	@GetMapping("/employeeprofile/fetch/{id}")

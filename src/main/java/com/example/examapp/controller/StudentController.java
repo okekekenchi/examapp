@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,9 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.examapp.datatablemodel.Student;
+import com.example.examapp.model.EmployeeModel;
 import com.example.examapp.model.StudentModel;
 import com.example.examapp.pagination.DataTableResults;
 import com.example.examapp.service.CourseService;
+import com.example.examapp.service.EmployeeService;
 import com.example.examapp.service.StudentService;
 import com.google.gson.Gson;
 
@@ -33,6 +36,9 @@ import com.google.gson.Gson;
 public class StudentController {
 	@Autowired
 	private StudentService studentService;
+	
+	@Autowired
+	private EmployeeService empService;
 
 	@Autowired
 	private CourseService courseService;
@@ -49,6 +55,12 @@ public class StudentController {
 	public ModelAndView registration(ModelAndView mv){
 		mv.addObject("courseList", courseService.getCourses());
 		mv.addObject("studentModel", new StudentModel());
+		
+		if(SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equalsIgnoreCase("[ROLE_ADMIN]"))
+			mv.addObject("isAdmin", true);
+		else
+			mv.addObject("isAdmin", false);
+
 		return mv;
 	}
 
@@ -171,15 +183,19 @@ public class StudentController {
 							)
 					);
     		}
-    		
+    					
     		for(Student student : studentList) {
     			if(student.getStatus() == 1) {
     				student.setValidStatus("<img src='/images/active.png' alt='Active' style='width:25px; height:25px;'/>");
-    				student.setDelete("<img src='/images/delete.png'  style='width:25px; height:25px;' name='delete' class='delete' id='"+student.getUserId()+"' data-status='"+student.getStatus()+"' alt='Delete'>");
-    			}else {
+    				if(SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equalsIgnoreCase("[ROLE_ADMIN]")) {
+    					student.setDelete("<img src='/images/delete.png'  style='width:25px; height:25px;' name='delete' class='delete' id='"+student.getUserId()+"' data-status='"+student.getStatus()+"' alt='Delete'>");
+    				}
+				}else {
     				student.setValidStatus("<img src='/images/inactive.png' alt='Inactive' style='width:25px; height:25px;'/>");
-    				student.setDelete("<img src='/images/delete.png' onclick='return;' style='width:25px; height:25px;' name='delete' class='delete' id='"+student.getUserId()+"' data-status='"+student.getStatus()+"' alt='Delete'>");
-    			}
+    				if(SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString().equalsIgnoreCase("[ROLE_ADMIN]")) {
+    					student.setDelete("<img src='/images/delete.png' onclick='return;' style='width:25px; height:25px;' name='delete' class='delete' id='"+student.getUserId()+"' data-status='"+student.getStatus()+"' alt='Delete'>");
+    				}
+				}
     			
     			if(student.getOnline() == 1) {
     				student.setOnlineStatus("<img src='/images/Online.png' alt='Active' style='width:25px; height:25px;'/>");

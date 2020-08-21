@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:insert="header :: head('Employee Profile')">
+	
+	</head>
+	<body style="background: url('/images/adminbackgroundimg.jpg')">
+		<script> AOS.init(); </script>
+		<div class="main-container" id="wrapper" style="background: rgb(0,0,0,0.8); background-size: cover; height: 100%">
+	      	
+	      	<div class="page-content-wrapper">
+	      		<div class="container-fluid mp0" id="alert_action"></div>
+		      	<div class="row mp0">
+	      			<input type="image" src="/images/edit.png" class="form-toggle" style="margin: 20px 0 0 20px; width: 50px; height: 50px;">
+
+	      			<span sec:authorize="hasRole('ROLE_ADMIN')"><a href="/vendor"> <input type="image" align="right" src="/images/previous.png" style="margin: 20px 20px 0 20px; border: none; width: 50px; height: 50px;"></a></span>
+	      			<span sec:authorize="hasRole('ROLE_VENDOR')"><a href="/pingenerator"> <input type="image" align="right" src="/images/previous.png" style="margin: 20px 20px 0 20px; border: none; width: 50px; height: 50px;"></a></span>
+	            </div>
+	        	<div class="container-fluid">
+	           	 	<div class="row">
+		                <div class="col-lg-12 col-md-12 profile-image" align="center" th:utext="${vendor.profileImage}">
+		                	<!---- PROFILE IMAGE GOES HERE  -->
+		               	</div>
+		                <div class="col-md-12 profile-body" style="display: flex; flex-flow: column;">
+		                								
+			                	<span class="profile-label">First Name : <label th:utext="${vendor.firstName}"></label></span>
+								<span class="profile-label">Middle Name : <label th:utext="${vendor.lastName}"></label></span>
+			                	<span class="profile-label"> Surname : <label th:utext="${vendor.otherName}"></label></span>
+		                		<span class="profile-label"> Email : <label th:utext="${vendor.email}"></label></span>
+			                	<span class="profile-label">Status : <label th:utext="${vendor.validStatus}"></label></span>
+			                	<span class="profile-label">Online : <label th:utext="${vendor.onlineStatus}"></label></span>
+			                	<span class="profile-label">Registration Date : <label th:utext="${vendor.regdate}"></label></span>
+		                	
+		               	</div>
+		            </div>
+				</div>
+			</div>
+			<div class="sidebar-wrapper">
+				<form autocomplete="off" action="#" th:action="@{/vendorprofile}" method="POST" role="form"
+	    			 th:object="${vendorModel}"  id="vendor_form" >
+								<div class="form-header"></div>
+								
+				   				<div >
+									<input type="text" th:field="*{firstName}" id="firstName" placeholder="First Name"
+											class="profile-input" pattern="^\s*([a-zA-Z]+)\s*$"/> 
+								</div>
+	
+								<div>
+									<input type="text" th:field="*{lastName}" id="lastName"
+											placeholder="Middle Name" class="profile-input" /> 
+								</div>
+								
+								<div>
+									<input type="text" th:field="*{otherName}" id="otherName"
+											placeholder="Surname" class="profile-input"/>
+								</div>
+								
+								<div>
+									<input type="text" th:field="*{email}" id="email"
+										placeholder="Okeke@gmail.com" class="profile-input"/>									 
+								</div>						
+							
+							
+							<div class="footer col-sm-9">
+								<div>
+									<input type="hidden" id="vendorId" th:field="*{userId}"/>
+									<button type="submit" id="action" class="btn btn-primary btn-block btn_submit" th:utext="EDIT"></button>
+								</div>	
+							</div>
+							
+							<div class="footer col-sm-9">
+				      			<a href="/changepassword" style="text-decoration: none; color: yellow; font-size: 15px;">Change Password</a>
+							</div>
+							
+							<div class="form-header"></div>
+					</form>
+			</div>
+		</div>
+	</body>
+	
+	<script>
+		$( document ).ready(function() {
+			var token = $("meta[name='_csrf']").attr("content");
+		  	var header = $("meta[name='_csrf_header']").attr("content");
+		  	
+			$(document).on('click','#SubjectLabel', function(){
+				var elements = $(".subject-body");
+					if(elements.css("display") == "none"){
+						elements.css("display","flex");
+					}else{
+						elements.css("display","none");
+					}
+				});
+			
+			$(document).on('click','.form-header', function(e){
+				e.preventDefault();
+				$("#wrapper").toggleClass("menuDisplayed");
+			});
+			
+			$(document).on('click','.form-toggle', function(e){
+				e.preventDefault();
+				$("#wrapper").toggleClass("menuDisplayed");
+				
+				var vendorId = $(".userProfileImage").attr("id");
+				$.ajax({
+					url:"/vendorprofile/fetch/"+vendorId,
+					dataType:"json",
+	            	"beforeSend": function(xhr) {
+	                    xhr.setRequestHeader(header, token);
+	                },
+					success:function(data)
+					{
+						$('#vendorId').val(data.userId);
+						$('#firstName').val(data.firstName);
+						$('#lastName').val(data.lastName);
+						$('#otherName').val(data.otherName);
+						$('#email').val(data.email);
+					}
+				}); 
+			});
+			
+			$(document).on('submit','#vendor_form', function(event){
+	        	event.preventDefault();
+	        	$('#action').attr('disabled','disabled');
+
+	        	var form_data = $(this).serialize();
+	        	$.ajax({
+	        		url:"/vendorprofile",
+	        		method:"POST",
+	        		data: form_data,
+	        		dataType: "text",
+	        		success:function(data)
+	        		{
+						$('#alert_action').html('<div class="alert alert-info" style="border-radius: none;">'+data+'</div>');
+						$('#alert_action').fadeIn(1000).html('<div class="alert alert-info" style="border-radius: 0px;">'+data+'</div>');
+
+						$('#alert_action').fadeOut(5000).html('<div class="alert" style="border-radius: 0px; background: #f8f8f8">'+data+'</div>');
+			        	$('#action').prop('disabled', false);
+						$("#wrapper").toggleClass("menuDisplayed");
+	        		}
+	        	})
+	        });
+		});
+	</script>
+</html>

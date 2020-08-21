@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:insert="header :: head('Result')">
+	
+	</head>
+	<body style="background: url('/images/adminbackgroundimg.jpg')">
+		<div class="container-fluid" style="background: rgb(0,0,0,0.9); background-size: cover; height: 100%">
+		
+			<div class="row">
+			<a href="logout"><img src="/images/logout1.png" title="Logout" style="width: 40px; height:40px; margin: 20px" align="right" alt="logout"/></a>
+				<div class= "col-lg-12 chart-title" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="200">
+					<p>Doughnut Pie Chart Representation of Your Result </p>
+				</div>
+			</div>
+			<div class="row" data-aos="fade-up" data-aos-easing="linear" data-aos-duration="400">
+		    	<div id="chart"></div>
+	    	</div>	    	
+    	</div>
+    	
+	</body>
+	<script>
+		// Replace Math.random() with a pseudo-random number generator to get reproducible results in e2e tests
+	      // Based on https://gist.github.com/blixt/f17b47c62508be59987b
+	      var _seed = 42
+	      Math.random = function() {
+	        _seed = (_seed * 16807) % 2147483647
+	        return (_seed - 1) / 2147483646
+	      }
+	
+		 $( document ).ready(function() {
+			 AOS.init();
+			 
+			function toCamelCase(str) {
+				
+				result = "";
+			    for(var i = 0; i < str.length; i++) {
+			      	
+		    		if(i > 0) {
+		    	  		result += str[i].substr(0, 1).toLowerCase() + str[i].substr(1);			    	    
+			   		}else{
+			   			result += (str[0]).toUpperCase();
+			   		}	
+			    }
+			    return result;
+			}		 
+			 
+			subjectArray = [];
+			subjectScoreArray = [];
+			totalQuestionsPassed = 0;
+			totalQuestionsFailed = 0;
+			
+			
+			$.ajax({
+				url:"/getResult",
+				dataType:"json",
+				success:function(data)
+				{
+					for(var i = 0; i < data.length; i++){
+						subjectArray[i] = toCamelCase(data[i].subjectName);
+						subjectScoreArray[i] = data[i].totalScore;
+						totalQuestionsPassed += data[i].totalScore;
+					};
+
+					subjectArray[data.length] = "Questions Failed";
+					subjectScoreArray[data.length] = parseInt(data[0].totalNumberOfQuestions) - parseInt(totalQuestionsPassed) ;
+				}
+			}); 
+				
+		        var options = {
+		        		title: {
+		        		    text: undefined,
+		        		    align: 'center',
+		        		    margin: 10,
+		        		    padding: 0,
+		        		    offsetX: 0,
+		        		    offsetY: 0,
+		        		    floating: false,
+		        		    style: {
+		        		      fontSize:  '0px',
+		        		      color:  undefined
+		        		    },
+		        		},
+		        		plotOptions: {
+		        			  pie: {
+		        			    customScale: 1,
+		        			    offsetX: 0,
+		        			    offsetY: 0,
+		        			    expandOnClick: true,
+		        			    dataLabels: {
+		        			        offset: 0,
+		        			        minAngleToShowLabel: 10
+		        			    }, 
+		        			    donut: {
+		        			      size: '70%',
+		        			      background: 'rgba(0,0,0,0.2)',
+		        			      labels: {
+		        			        show: true,
+		        			        name: {
+		        			          show: true,
+		        			          fontSize: '22px',
+		        			          fontFamily: '',
+		        			          color: 'White',
+		        			          offsetY: -10
+		        			        },
+		        			        value: {
+		        			          show: true,
+		        			          fontSize: '16px',
+		        			          fontFamily: '',
+		        			          color: 'White',
+		        			          offsetY: 16,
+		        			          formatter: function (val) {
+		        			            return val
+		        			          }
+		        			        },
+		        			        total: {
+		        			          show: true,
+		        			          showAlways: false,
+		        			          label: 'Total Questions',
+		        			          color: 'White',
+		        			          formatter: function (w) {
+		        			            return w.globals.seriesTotals.reduce((a, b) => {
+		        			              return a + b
+		        			            }, 0)
+		        			          }
+		        			        }
+		        			      }
+		        			    },      
+		        			  }
+		        			},
+			       	series: subjectScoreArray,
+			          labels: subjectArray,
+			          chart: {
+			          width: 700,
+			          type: 'donut',
+			          fontFamily: ''
+			        },
+			        dataLabels: {
+			            enabled: true,
+			            enabledOnSeries: undefined,
+			            formatter: function (val, opts) {
+			                return Math.round(val) + "%";
+			            },
+			            textAnchor: 'middle',
+			            offsetX: 0,
+			            offsetY: 0,
+			            style: {
+			                fontSize: '14px',
+			                fontFamily: '',
+			                fontWeight: 'bold',
+			                colors: ['white']
+			            },
+			            background: {
+			              enabled: true,
+			              foreColor: '#ffffff',
+			              padding: 4,
+			              borderRadius: 2,
+			              borderWidth: 1,
+			              borderColor: '#ffffff',
+			              opacity: 0.9
+			          },
+			            dropShadow: {
+			                enabled: false,
+			                top: 1,
+			                left: 1,
+			                blur: 1,
+			                color: '#000',
+			                opacity: 0.45
+			            }
+			        },
+			        fill: {
+			        	colors: [ '#1A73E8', '#329c72', '#e3f370', '#B32824', '#96497e'],
+			        	// blue
+			        	// light green
+			        	// green
+			        	//purple
+			        	//red
+			        	type: ['gradient', 'gradient', 'gradient', 'gradient', 'gradient']
+			        },
+			        legend: {
+			          formatter: function(val, opts) {
+			            return val + " - " + opts.w.globals.series[opts.seriesIndex]
+			          }
+			        },
+			        tooltip: {
+			            enabled: true,
+			        },
+			        legend: {
+			        	show: true,
+			          	position: 'right',
+			          	fontSize: '18px',
+			            labels: {
+			                colors: ['#000000'],
+			                useSeriesColors: false
+			            },
+			        },
+			        theme:{
+			        	mode: 'darks'
+			        },
+			        responsive: [{
+			          breakpoint: 800,
+			          options: {
+			            chart: {
+			              width: 400
+			            },
+			            legend: {
+			            	show: true,
+			              	position: 'bottom',
+			              	fontSize: '13px',
+			              	labels: {
+			                    colors: ['#ffffff'],
+			                    useSeriesColors: false
+			                },
+			            }
+			          }
+			        }]
+			        };
+		
+				var chart = new ApexCharts(document.querySelector("#chart"), options);
+				chart.render();
+		});
+		 
+    </script>    
+</html>
+	

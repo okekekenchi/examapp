@@ -1,22 +1,20 @@
 package com.example.examapp.controller;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.examapp.datatablemodel.Student;
 import com.example.examapp.model.StudentModel;
@@ -76,7 +74,7 @@ public class StudentProfileController {
 		
 		student.setAddress(studentModel.getAddress());
 		student.setProfileImage("<img src='/Image/" + id + "' name='image' id='" + id
-				+ "' alt='studentImage' class='img-rounded studentProfileImage'/>");
+				+ "' alt='studentImage' class='img-rounded userProfileImage'/>");
 
 		mv.addObject("courseList", courseService.getCourses());
 		mv.addObject("subjectList", subjectModelList);
@@ -87,28 +85,30 @@ public class StudentProfileController {
 	}
 
 	@PostMapping(value = "/studentprofile")
-	public RedirectView updateStudentDetail(@Valid @ModelAttribute("StudentModel") StudentModel studentModel,
-			BindingResult bindingResult, ModelAndView mv) {
+	public String updateStudentDetail(HttpServletRequest request, StudentModel studentUpdate) {
+		
+		Enumeration<String> parameterNames = request.getParameterNames();
 
-		StudentModel studentUpdate = studentService.findById(studentModel.getUserId());
-
-		studentUpdate.setFirstName(studentModel.getFirstName());
-		studentUpdate.setLastName(studentModel.getLastName());
-		studentUpdate.setOtherName(studentModel.getOtherName());
-		studentUpdate.setAddress(studentModel.getAddress());
-		studentUpdate.setEmail(studentModel.getEmail());
-		studentUpdate.setGender(studentModel.getGender());
-		studentUpdate.setPhone(studentModel.getPhone());
-		studentUpdate.setCourseModel(studentModel.getCourseModel());
-
-		if (!bindingResult.hasErrors()) {
-			studentService.saveStudent(studentUpdate);
-			mv.addObject("successMessage", "Employee has been registered successfully");
-		} else {
-			bindingResult.rejectValue("email", "error.email", bindingResult.toString());
-		}
-		return new RedirectView("/studentprofile/"+studentModel.getUserId());
+    	if(parameterNames.hasMoreElements()) {
+    		
+    		studentUpdate = studentService.findById(Integer.parseInt(request.getParameter("userId")));
+    		studentUpdate.setFirstName(String.valueOf(request.getParameter("firstName")));
+    		studentUpdate.setLastName(String.valueOf(request.getParameter("lastName")));
+    		studentUpdate.setOtherName(String.valueOf(request.getParameter("otherName")));
+    		studentUpdate.setEmail(String.valueOf(request.getParameter("email")));
+    		studentUpdate.setFirstName(String.valueOf(request.getParameter("address")));
+    		studentUpdate.setLastName(String.valueOf(request.getParameter("email")));
+    		studentUpdate.setOtherName(String.valueOf(request.getParameter("gender")));
+    		studentUpdate.setEmail(String.valueOf(request.getParameter("phone")));
+    		studentUpdate.setCourseModel(courseService.findById(Integer.valueOf(request.getParameter("courseModel"))));
+    		
+    		studentService.updateStudent(studentUpdate);    		
+    	}
+		String msg = "Update Successful";
+		return new Gson().toJson(msg);
 	}
+
+		//studentUpdate.setCourseModel(studentModel.getCourseModel());
 
 	@GetMapping("/studentprofile/fetch/{id}")
 	@ResponseBody
@@ -119,8 +119,7 @@ public class StudentProfileController {
 				studentModel.getStatus(), studentModel.getOnline(), studentModel.getRegdate(), "",
 				studentModel.getCourseModel().getCourseId().toString());
 		// Persist ID
-		student.setUserId(id);
-
+		//student.setUserId(id);
 		return new Gson().toJson(student);
 	}
 }

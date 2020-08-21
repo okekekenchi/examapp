@@ -32,24 +32,19 @@ public class QuestionModel {
 	@NotEmpty(message = "*Please provide a valid question")
 	private String questionName;
 	
-	@Column(name = "optionA")
-	@NotEmpty(message = "*This field is required")
+	@Column(name = "optionA", length=1)
 	private String optionA;
 	
-	@Column(name = "optionB")
-	@NotEmpty(message = "*This field is required")
+	@Column(name = "optionB", length=1)
 	private String optionB;
 	
-	@Column(name = "optionC")
-	@NotEmpty(message = "*This field is required")
+	@Column(name = "optionC", length=1)
 	private String optionC;
 	
-	@Column(name = "optionD")
-	@NotEmpty(message = "*This field is required")
+	@Column(name = "optionD", length=1)
 	private String optionD;
 	
-	@Column(name = "questionAnswer")
-	@NotEmpty(message = "*This field is required")
+	@Column(name = "questionAnswer", length=1)
 	private String questionAnswer;
 	
 	@ManyToOne

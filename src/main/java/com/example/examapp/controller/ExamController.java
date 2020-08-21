@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
@@ -22,6 +24,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.example.examapp.model.ExamQuestion;
 import com.example.examapp.model.ExamTimeFormat;
 import com.example.examapp.model.QuestionProp;
+import com.example.examapp.model.SaveResult;
 import com.example.examapp.model.StudentModel;
 import com.example.examapp.model.SubjectModel;
 import com.example.examapp.service.EmailService;
@@ -466,5 +469,30 @@ public class ExamController {
 		}else {
 			return new ExamTimeFormat(0,1,0);
 		}
+	}
+	
+	/**
+	 * API
+	 */
+	@PostMapping("/saveResult")
+	@ResponseBody
+	public String saveResult(@RequestBody SaveResult saveResult) {
+		
+		StudentModel student =  studentService.findById(saveResult.getId());
+		int totalScore = 0;
+		
+		for(QuestionProp qp : saveResult.getQuestionProperty()) {
+			totalScore += qp.getTotalScore();
+		}
+		
+		student.setTakenTest(1);
+		student.setStudentScore(totalScore);
+		student.setOnline(0);
+		student.setStatus(0);
+		//studentService.updateStudent(student);
+
+		emailService.sendSimpleEmail(saveResult.getQuestionProperty(), student);
+
+		return new Gson().toJson("Result saved");
 	}
 }
